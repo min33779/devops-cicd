@@ -14,19 +14,20 @@
 
 3. 사용자 상세 내역을 입력합니다.
 
-    ![Alt](../images/iam/iam-1-create-user.png "Title")
+    ![Alt](./images/iam-add-user.png "Title")
 
-4. AdministratorAccess IAM 정책츨 추가합니다.
+4. AdministratorAccess IAM 정책을 추가합니다.
 
-     ![Alt](../images/iam/iam-2-attach-policy.png "add policy")
+     ![Alt](./images/iam-attach-policies.png "add policy")
 
 5. Create User 버튼을 클릭해서 사용자를 생성합니다.
 
-     ![Alt](../images/iam/iam-3-create-user.png "create user")
+     ![Alt](./images/iam-review.png "create user")
 
 6. 로그인을 위한 URL을 메모해둡니다.
 
-     ![Alt](../images/iam/iam-4-save-url.png "create user")
+     ![Alt](./images/iam-result.png "result user")
+	 
 	 
 ## Cloud9 워크스페이스 생성하기
 
@@ -39,14 +40,14 @@
     [https://us-west-2.console.aws.amazon.com/cloud9/home?region=us-west-2](https://us-west-2.console.aws.amazon.com/cloud9/home?region=us-west-2)
 
 2. Create environment 버튼을 클릭합니다.
-3. Name 에 containerhol 등과 같은 형식으로 입력합니다. 다른 항목은 디폴트로 내버려둡니다.
+3. Name 에 devopshol 등과 같은 형식으로 입력합니다. 다른 항목은 디폴트로 내버려둡니다.
 4. 워크스페이스 생성이 되면 welcome 탭을 닫고 새로운 터미널을 열어서 개발 환경을 커스터 마이징 합니다.
 
-     ![Alt](../images/cloud9/c9before.png "cloud9 before")
+     ![Alt](./images/cloud9-create-env.PNG "cloud9 before")
 
 5. 여러분의 워크스페이스는 다음과 같아 보여야합니다.:
 
-     ![Alt](../images/cloud9/c9after.png "cloud9 afters")
+     ![Alt](./images/cloud9-workspace-ready.PNG "cloud9 afters")
 
 # 전체 아키텍처
 
@@ -56,9 +57,9 @@
 	
 # CDK 로 인프라 및 ECS 클러스터 생성하기
 
-> **여기서는 cdk init을 사용해서, 타입스크립트를 사용하는 새로운 AWS CDK 프로젝트를 생성할 것입니다.
+> **여기서는 cdk init을 사용해서, 타입스크립트를 사용하는 새로운 AWS CDK 프로젝트를 생성할 것입니다.**
 >
-> **또한 CDK Toolkit를 사용해서 샘플 앱을 배포하는 AWS CloudFormation 템플릿을 만드는 방법, 계정에 CDK 어플리케이션을 배포하는 방법을 살펴봅니다.
+> **또한 CDK Toolkit를 사용해서 샘플 앱을 배포하는 AWS CloudFormation 템플릿을 만드는 방법, 계정에 CDK 어플리케이션을 배포하는 방법을 살펴봅니다.**
 
 ## CDK INIT
 
@@ -76,7 +77,23 @@
 	
 	실행 결과는 다음과 같습니다. (시스템에 git이 설치 되지 않은 경우, git repository 초기화와 관련된 경고가 나올 수 있습니다. 워크샵 실행에는 문제가 되지 않으니 계속 진행합니다)
 
-	> **그림**
+	```bash
+	Applying project template app for typescript
+	# Welcome to your CDK TypeScript project!
+
+	This is a blank project for TypeScript development with CDK.
+
+	The `cdk.json` file tells the CDK Toolkit how to execute your app.
+
+	## Useful commands
+
+	 * `npm run build`   compile typescript to js
+	 * `npm run watch`   watch for changes and compile
+	 * `npm run test`    perform the jest unit tests
+	 * `cdk deploy`      deploy this stack to your default AWS account/region
+	 * `cdk diff`        compare deployed stack with current state
+	 * `cdk synth`       emits the synthesized CloudFormation template
+    ```
 	
 	실행 결과에는 유용한 cdk 커맨드가 포함되어 있습니다.
 
@@ -100,11 +117,30 @@ TypeScript로 작성된 소스는 JavaScript로 컴파일 과정이 필요합니
 	
 4. 창 전체 내용이 갱신되어, 다음 내용을 확인할 수 있습니다.
 
-	> **결과**
+	```bash
+	[12:55:24 AM] File change detected. Starting incremental compilation...
+
+	[12:55:24 AM] Found 0 errors. Watching for file changes.
+    ```
 
 	npm run watch 실행 시 TypeScript 컴파일러(tsc)를 "watch" 모드로 시작합니다. 이 모드에서는 프로젝트 경로를 모니터링 하고,  변경된 내용이 포함된 .ts파일이 발생하면 .js파일로 자동 컴파일 합니다.
 
 	**!! 실습 종료전까지는 watch 명령을 실행중인 터미널 창을 열어둡니다.**
+	
+## 프로젝트 구조
+
+프로젝트의 경로 구조는 다음과 같습니다.
+
+	![Alt](./images/cloud9-project-structure.PNG "cdk project")
+
+	> bin/cdk-ecs.ts 는 CDK 앱의 진입점입니다. 
+	> package.json은 npm 모듈의 설정 파일입니다. 앱의 이름, 버전, 종속성, 빌드 스크립트(예, "watch", "build")등의 정보를 포함합니다. package-lock.json은 npm으로 설치되는 패키지에 대한 의존성을 가지고 있는 파일입니다. npm에 의해 자동으로 생성되고 관리되기 때문에 별도로 신경을 쓰지 않으셔도 됩니다
+	> cdk.json은 CDK 툴킷에 앱을 실행하는 방법을 설정합니다. 실습에서는 "npx ts-node bin/cdk-ecs.ts"가 됩니다.
+	> tsconfig.json에는 TypeScript 설정 정보가 있습니다.
+	> .gitignore는 코드 형상관리 시스템에 포함시키지 않을 파일을 설정합니다. .npmignore는 패키지 매니저에 모듈을 배포할때 제외할 파일을 설정합니다.
+	> node_modules은 npm이 관리하며 프로젝트 종속성에 관련된 파일을 저장합니다.
+
+lib/cdk-ecs-stack.ts 파일을 열어보십시오. 우리 어플리케이션의 중요한 부분이 여기에 정의될 것입니다.
 	
 ## CDK 패키지 설치 및 코드 수정
 
@@ -117,6 +153,7 @@ Network, ECS 를 생성하기 위해 필요한 CDK 패키지를 설치하고, �
 	npm install @aws-cdk/aws-ecs –save
 	npm install @aws-cdk/aws-ecs-patterns --save
     ```	
+	
 2. 프로젝트 루트 디렉토리에 imgsrc 디렉토리를 생성하고 그 아래 파일을 생성합니다.
 
 	**Dockerfile** 생성 (Web 요청을 처리할 NGINX 컨테이너 이미지 설정)
@@ -195,7 +232,592 @@ Network, ECS 를 생성하기 위해 필요한 CDK 패키지를 설치하고, �
 	
 실행 결과는 아래와 같은 CloudFormation 템플릿이 출력됩니다.
 
-	> **그림**
+	```bash
+	Resources:
+	  vpcA2121C38:
+		Type: AWS::EC2::VPC
+		Properties:
+		  CidrBlock: 10.0.0.0/16
+		  EnableDnsHostnames: true
+		  EnableDnsSupport: true
+		  InstanceTenancy: default
+		  Tags:
+			- Key: Name
+			  Value: CdkEcsStack/vpc
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/Resource
+	  vpcPublicSubnet1Subnet2E65531E:
+		Type: AWS::EC2::Subnet
+		Properties:
+		  CidrBlock: 10.0.0.0/18
+		  VpcId:
+			Ref: vpcA2121C38
+		  AvailabilityZone:
+			Fn::Select:
+			  - 0
+			  - Fn::GetAZs: ""
+		  MapPublicIpOnLaunch: true
+		  Tags:
+			- Key: aws-cdk:subnet-name
+			  Value: Public
+			- Key: aws-cdk:subnet-type
+			  Value: Public
+			- Key: Name
+			  Value: CdkEcsStack/vpc/PublicSubnet1
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet1/Subnet
+	  vpcPublicSubnet1RouteTable48A2DF9B:
+		Type: AWS::EC2::RouteTable
+		Properties:
+		  VpcId:
+			Ref: vpcA2121C38
+		  Tags:
+			- Key: Name
+			  Value: CdkEcsStack/vpc/PublicSubnet1
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet1/RouteTable
+	  vpcPublicSubnet1RouteTableAssociation5D3F4579:
+		Type: AWS::EC2::SubnetRouteTableAssociation
+		Properties:
+		  RouteTableId:
+			Ref: vpcPublicSubnet1RouteTable48A2DF9B
+		  SubnetId:
+			Ref: vpcPublicSubnet1Subnet2E65531E
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet1/RouteTableAssociation
+	  vpcPublicSubnet1DefaultRoute10708846:
+		Type: AWS::EC2::Route
+		Properties:
+		  RouteTableId:
+			Ref: vpcPublicSubnet1RouteTable48A2DF9B
+		  DestinationCidrBlock: 0.0.0.0/0
+		  GatewayId:
+			Ref: vpcIGWE57CBDCA
+		DependsOn:
+		  - vpcVPCGW7984C166
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet1/DefaultRoute
+	  vpcPublicSubnet1EIPDA49DCBE:
+		Type: AWS::EC2::EIP
+		Properties:
+		  Domain: vpc
+		  Tags:
+			- Key: Name
+			  Value: CdkEcsStack/vpc/PublicSubnet1
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet1/EIP
+	  vpcPublicSubnet1NATGateway9C16659E:
+		Type: AWS::EC2::NatGateway
+		Properties:
+		  AllocationId:
+			Fn::GetAtt:
+			  - vpcPublicSubnet1EIPDA49DCBE
+			  - AllocationId
+		  SubnetId:
+			Ref: vpcPublicSubnet1Subnet2E65531E
+		  Tags:
+			- Key: Name
+			  Value: CdkEcsStack/vpc/PublicSubnet1
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet1/NATGateway
+	  vpcPublicSubnet2Subnet009B674F:
+		Type: AWS::EC2::Subnet
+		Properties:
+		  CidrBlock: 10.0.64.0/18
+		  VpcId:
+			Ref: vpcA2121C38
+		  AvailabilityZone:
+			Fn::Select:
+			  - 1
+			  - Fn::GetAZs: ""
+		  MapPublicIpOnLaunch: true
+		  Tags:
+			- Key: aws-cdk:subnet-name
+			  Value: Public
+			- Key: aws-cdk:subnet-type
+			  Value: Public
+			- Key: Name
+			  Value: CdkEcsStack/vpc/PublicSubnet2
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet2/Subnet
+	  vpcPublicSubnet2RouteTableEB40D4CB:
+		Type: AWS::EC2::RouteTable
+		Properties:
+		  VpcId:
+			Ref: vpcA2121C38
+		  Tags:
+			- Key: Name
+			  Value: CdkEcsStack/vpc/PublicSubnet2
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet2/RouteTable
+	  vpcPublicSubnet2RouteTableAssociation21F81B59:
+		Type: AWS::EC2::SubnetRouteTableAssociation
+		Properties:
+		  RouteTableId:
+			Ref: vpcPublicSubnet2RouteTableEB40D4CB
+		  SubnetId:
+			Ref: vpcPublicSubnet2Subnet009B674F
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet2/RouteTableAssociation
+	  vpcPublicSubnet2DefaultRouteA1EC0F60:
+		Type: AWS::EC2::Route
+		Properties:
+		  RouteTableId:
+			Ref: vpcPublicSubnet2RouteTableEB40D4CB
+		  DestinationCidrBlock: 0.0.0.0/0
+		  GatewayId:
+			Ref: vpcIGWE57CBDCA
+		DependsOn:
+		  - vpcVPCGW7984C166
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet2/DefaultRoute
+	  vpcPrivateSubnet1Subnet934893E8:
+		Type: AWS::EC2::Subnet
+		Properties:
+		  CidrBlock: 10.0.128.0/18
+		  VpcId:
+			Ref: vpcA2121C38
+		  AvailabilityZone:
+			Fn::Select:
+			  - 0
+			  - Fn::GetAZs: ""
+		  MapPublicIpOnLaunch: false
+		  Tags:
+			- Key: aws-cdk:subnet-name
+			  Value: Private
+			- Key: aws-cdk:subnet-type
+			  Value: Private
+			- Key: Name
+			  Value: CdkEcsStack/vpc/PrivateSubnet1
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/PrivateSubnet1/Subnet
+	  vpcPrivateSubnet1RouteTableB41A48CC:
+		Type: AWS::EC2::RouteTable
+		Properties:
+		  VpcId:
+			Ref: vpcA2121C38
+		  Tags:
+			- Key: Name
+			  Value: CdkEcsStack/vpc/PrivateSubnet1
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/PrivateSubnet1/RouteTable
+	  vpcPrivateSubnet1RouteTableAssociation67945127:
+		Type: AWS::EC2::SubnetRouteTableAssociation
+		Properties:
+		  RouteTableId:
+			Ref: vpcPrivateSubnet1RouteTableB41A48CC
+		  SubnetId:
+			Ref: vpcPrivateSubnet1Subnet934893E8
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/PrivateSubnet1/RouteTableAssociation
+	  vpcPrivateSubnet1DefaultRoute1AA8E2E5:
+		Type: AWS::EC2::Route
+		Properties:
+		  RouteTableId:
+			Ref: vpcPrivateSubnet1RouteTableB41A48CC
+		  DestinationCidrBlock: 0.0.0.0/0
+		  NatGatewayId:
+			Ref: vpcPublicSubnet1NATGateway9C16659E
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/PrivateSubnet1/DefaultRoute
+	  vpcPrivateSubnet2Subnet7031C2BA:
+		Type: AWS::EC2::Subnet
+		Properties:
+		  CidrBlock: 10.0.192.0/18
+		  VpcId:
+			Ref: vpcA2121C38
+		  AvailabilityZone:
+			Fn::Select:
+			  - 1
+			  - Fn::GetAZs: ""
+		  MapPublicIpOnLaunch: false
+		  Tags:
+			- Key: aws-cdk:subnet-name
+			  Value: Private
+			- Key: aws-cdk:subnet-type
+			  Value: Private
+			- Key: Name
+			  Value: CdkEcsStack/vpc/PrivateSubnet2
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/PrivateSubnet2/Subnet
+	  vpcPrivateSubnet2RouteTable7280F23E:
+		Type: AWS::EC2::RouteTable
+		Properties:
+		  VpcId:
+			Ref: vpcA2121C38
+		  Tags:
+			- Key: Name
+			  Value: CdkEcsStack/vpc/PrivateSubnet2
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/PrivateSubnet2/RouteTable
+	  vpcPrivateSubnet2RouteTableAssociation007E94D3:
+		Type: AWS::EC2::SubnetRouteTableAssociation
+		Properties:
+		  RouteTableId:
+			Ref: vpcPrivateSubnet2RouteTable7280F23E
+		  SubnetId:
+			Ref: vpcPrivateSubnet2Subnet7031C2BA
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/PrivateSubnet2/RouteTableAssociation
+	  vpcPrivateSubnet2DefaultRouteB0E07F99:
+		Type: AWS::EC2::Route
+		Properties:
+		  RouteTableId:
+			Ref: vpcPrivateSubnet2RouteTable7280F23E
+		  DestinationCidrBlock: 0.0.0.0/0
+		  NatGatewayId:
+			Ref: vpcPublicSubnet1NATGateway9C16659E
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/PrivateSubnet2/DefaultRoute
+	  vpcIGWE57CBDCA:
+		Type: AWS::EC2::InternetGateway
+		Properties:
+		  Tags:
+			- Key: Name
+			  Value: CdkEcsStack/vpc
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/IGW
+	  vpcVPCGW7984C166:
+		Type: AWS::EC2::VPCGatewayAttachment
+		Properties:
+		  VpcId:
+			Ref: vpcA2121C38
+		  InternetGatewayId:
+			Ref: vpcIGWE57CBDCA
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/vpc/VPCGW
+	  cluster611F8AFF:
+		Type: AWS::ECS::Cluster
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/cluster/Resource
+	  ecsappLB2FC258F5:
+		Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+		Properties:
+		  Scheme: internet-facing
+		  SecurityGroups:
+			- Fn::GetAtt:
+				- ecsappLBSecurityGroupBA7090EC
+				- GroupId
+		  Subnets:
+			- Ref: vpcPublicSubnet1Subnet2E65531E
+			- Ref: vpcPublicSubnet2Subnet009B674F
+		  Type: application
+		DependsOn:
+		  - vpcPublicSubnet1DefaultRoute10708846
+		  - vpcPublicSubnet2DefaultRouteA1EC0F60
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/ecsapp/LB/Resource
+	  ecsappLBSecurityGroupBA7090EC:
+		Type: AWS::EC2::SecurityGroup
+		Properties:
+		  GroupDescription: Automatically created Security Group for ELB CdkEcsStackecsappLB20B8E7BA
+		  SecurityGroupIngress:
+			- CidrIp: 0.0.0.0/0
+			  Description: Allow from anyone on port 80
+			  FromPort: 80
+			  IpProtocol: tcp
+			  ToPort: 80
+		  VpcId:
+			Ref: vpcA2121C38
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/ecsapp/LB/SecurityGroup/Resource
+	  ecsappLBSecurityGrouptoCdkEcsStackecsappServiceSecurityGroup3A7FEC12803BEC0C48:
+		Type: AWS::EC2::SecurityGroupEgress
+		Properties:
+		  GroupId:
+			Fn::GetAtt:
+			  - ecsappLBSecurityGroupBA7090EC
+			  - GroupId
+		  IpProtocol: tcp
+		  Description: Load balancer to target
+		  DestinationSecurityGroupId:
+			Fn::GetAtt:
+			  - ecsappServiceSecurityGroup6251D712
+			  - GroupId
+		  FromPort: 80
+		  ToPort: 80
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/ecsapp/LB/SecurityGroup/to CdkEcsStackecsappServiceSecurityGroup3A7FEC12:80
+	  ecsappLBPublicListenerAE227035:
+		Type: AWS::ElasticLoadBalancingV2::Listener
+		Properties:
+		  DefaultActions:
+			- TargetGroupArn:
+				Ref: ecsappLBPublicListenerECSGroup5C3D922F
+			  Type: forward
+		  LoadBalancerArn:
+			Ref: ecsappLB2FC258F5
+		  Port: 80
+		  Protocol: HTTP
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/ecsapp/LB/PublicListener/Resource
+	  ecsappLBPublicListenerECSGroup5C3D922F:
+		Type: AWS::ElasticLoadBalancingV2::TargetGroup
+		Properties:
+		  Port: 80
+		  Protocol: HTTP
+		  TargetType: ip
+		  VpcId:
+			Ref: vpcA2121C38
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/ecsapp/LB/PublicListener/ECSGroup/Resource
+	  ecsappTaskDefTaskRoleF6B17925:
+		Type: AWS::IAM::Role
+		Properties:
+		  AssumeRolePolicyDocument:
+			Statement:
+			  - Action: sts:AssumeRole
+				Effect: Allow
+				Principal:
+				  Service: ecs-tasks.amazonaws.com
+			Version: "2012-10-17"
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/ecsapp/TaskDef/TaskRole/Resource
+	  ecsappTaskDef0D33E298:
+		Type: AWS::ECS::TaskDefinition
+		Properties:
+		  ContainerDefinitions:
+			- Essential: true
+			  Image:
+				Fn::Join:
+				  - ""
+				  - - Ref: AWS::AccountId
+					- .dkr.ecr.
+					- Ref: AWS::Region
+					- "."
+					- Ref: AWS::URLSuffix
+					- /aws-cdk/assets:7355c642ffb4f29ad3270368c55c04c3ed2032deec01c23e9720a87f05477f9d
+			  LogConfiguration:
+				LogDriver: awslogs
+				Options:
+				  awslogs-group:
+					Ref: ecsappTaskDefwebLogGroup33E744A7
+				  awslogs-stream-prefix: ecsapp
+				  awslogs-region:
+					Ref: AWS::Region
+			  Name: web
+			  PortMappings:
+				- ContainerPort: 80
+				  Protocol: tcp
+		  Cpu: "512"
+		  ExecutionRoleArn:
+			Fn::GetAtt:
+			  - ecsappTaskDefExecutionRoleA768A0D2
+			  - Arn
+		  Family: CdkEcsStackecsappTaskDefCE136462
+		  Memory: "1024"
+		  NetworkMode: awsvpc
+		  RequiresCompatibilities:
+			- FARGATE
+		  TaskRoleArn:
+			Fn::GetAtt:
+			  - ecsappTaskDefTaskRoleF6B17925
+			  - Arn
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/ecsapp/TaskDef/Resource
+	  ecsappTaskDefwebLogGroup33E744A7:
+		Type: AWS::Logs::LogGroup
+		UpdateReplacePolicy: Retain
+		DeletionPolicy: Retain
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/ecsapp/TaskDef/web/LogGroup/Resource
+	  ecsappTaskDefExecutionRoleA768A0D2:
+		Type: AWS::IAM::Role
+		Properties:
+		  AssumeRolePolicyDocument:
+			Statement:
+			  - Action: sts:AssumeRole
+				Effect: Allow
+				Principal:
+				  Service: ecs-tasks.amazonaws.com
+			Version: "2012-10-17"
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/ecsapp/TaskDef/ExecutionRole/Resource
+	  ecsappTaskDefExecutionRoleDefaultPolicy56A9AD66:
+		Type: AWS::IAM::Policy
+		Properties:
+		  PolicyDocument:
+			Statement:
+			  - Action:
+				  - ecr:BatchCheckLayerAvailability
+				  - ecr:GetDownloadUrlForLayer
+				  - ecr:BatchGetImage
+				Effect: Allow
+				Resource:
+				  Fn::Join:
+					- ""
+					- - "arn:"
+					  - Ref: AWS::Partition
+					  - ":ecr:"
+					  - Ref: AWS::Region
+					  - ":"
+					  - Ref: AWS::AccountId
+					  - :repository/aws-cdk/assets
+			  - Action: ecr:GetAuthorizationToken
+				Effect: Allow
+				Resource: "*"
+			  - Action:
+				  - logs:CreateLogStream
+				  - logs:PutLogEvents
+				Effect: Allow
+				Resource:
+				  Fn::GetAtt:
+					- ecsappTaskDefwebLogGroup33E744A7
+					- Arn
+			Version: "2012-10-17"
+		  PolicyName: ecsappTaskDefExecutionRoleDefaultPolicy56A9AD66
+		  Roles:
+			- Ref: ecsappTaskDefExecutionRoleA768A0D2
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/ecsapp/TaskDef/ExecutionRole/DefaultPolicy/Resource
+	  ecsappService3B1B03A6:
+		Type: AWS::ECS::Service
+		Properties:
+		  Cluster:
+			Ref: cluster611F8AFF
+		  DeploymentConfiguration:
+			MaximumPercent: 200
+			MinimumHealthyPercent: 50
+		  DesiredCount: 2
+		  EnableECSManagedTags: false
+		  HealthCheckGracePeriodSeconds: 60
+		  LaunchType: FARGATE
+		  LoadBalancers:
+			- ContainerName: web
+			  ContainerPort: 80
+			  TargetGroupArn:
+				Ref: ecsappLBPublicListenerECSGroup5C3D922F
+		  NetworkConfiguration:
+			AwsvpcConfiguration:
+			  AssignPublicIp: DISABLED
+			  SecurityGroups:
+				- Fn::GetAtt:
+					- ecsappServiceSecurityGroup6251D712
+					- GroupId
+			  Subnets:
+				- Ref: vpcPrivateSubnet1Subnet934893E8
+				- Ref: vpcPrivateSubnet2Subnet7031C2BA
+		  TaskDefinition:
+			Ref: ecsappTaskDef0D33E298
+		DependsOn:
+		  - ecsappLBPublicListenerECSGroup5C3D922F
+		  - ecsappLBPublicListenerAE227035
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/ecsapp/Service/Service
+	  ecsappServiceSecurityGroup6251D712:
+		Type: AWS::EC2::SecurityGroup
+		Properties:
+		  GroupDescription: CdkEcsStack/ecsapp/Service/SecurityGroup
+		  SecurityGroupEgress:
+			- CidrIp: 0.0.0.0/0
+			  Description: Allow all outbound traffic by default
+			  IpProtocol: "-1"
+		  VpcId:
+			Ref: vpcA2121C38
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/ecsapp/Service/SecurityGroup/Resource
+	  ecsappServiceSecurityGroupfromCdkEcsStackecsappLBSecurityGroup055394D380226851E0:
+		Type: AWS::EC2::SecurityGroupIngress
+		Properties:
+		  IpProtocol: tcp
+		  Description: Load balancer to target
+		  FromPort: 80
+		  GroupId:
+			Fn::GetAtt:
+			  - ecsappServiceSecurityGroup6251D712
+			  - GroupId
+		  SourceSecurityGroupId:
+			Fn::GetAtt:
+			  - ecsappLBSecurityGroupBA7090EC
+			  - GroupId
+		  ToPort: 80
+		Metadata:
+		  aws:cdk:path: CdkEcsStack/ecsapp/Service/SecurityGroup/from CdkEcsStackecsappLBSecurityGroup055394D3:80
+	  CDKMetadata:
+		Type: AWS::CDK::Metadata
+		Properties:
+		  Modules: aws-cdk=1.49.1,@aws-cdk/assets=1.51.0,@aws-cdk/aws-applicationautoscaling=1.51.0,@aws-cdk/aws-autoscaling=1.51.0,@aws-cdk/aws-autoscaling-common=1.51.0,@aws-cdk/aws-autoscaling-hooktargets=1.51.0,@aws-cdk/aws-certificatemanager=1.51.0,@aws-cdk/aws-cloudwatch=1.51.0,@aws-cdk/aws-ec2=1.51.0,@aws-cdk/aws-ecr=1.51.0,@aws-cdk/aws-ecr-assets=1.51.0,@aws-cdk/aws-ecs=1.51.0,@aws-cdk/aws-ecs-patterns=1.51.0,@aws-cdk/aws-elasticloadbalancingv2=1.51.0,@aws-cdk/aws-events=1.51.0,@aws-cdk/aws-events-targets=1.51.0,@aws-cdk/aws-iam=1.51.0,@aws-cdk/aws-kms=1.51.0,@aws-cdk/aws-lambda=1.51.0,@aws-cdk/aws-logs=1.51.0,@aws-cdk/aws-route53=1.51.0,@aws-cdk/aws-route53-targets=1.51.0,@aws-cdk/aws-s3=1.51.0,@aws-cdk/aws-s3-assets=1.51.0,@aws-cdk/aws-servicediscovery=1.51.0,@aws-cdk/aws-sns=1.51.0,@aws-cdk/aws-sns-subscriptions=1.51.0,@aws-cdk/aws-sqs=1.51.0,@aws-cdk/aws-ssm=1.51.0,@aws-cdk/cloud-assembly-schema=1.51.0,@aws-cdk/core=1.51.0,@aws-cdk/custom-resources=1.51.0,@aws-cdk/cx-api=1.51.0,@aws-cdk/region-info=1.51.0,jsii-runtime=node.js/v10.21.0
+		Condition: CDKMetadataAvailable
+	Outputs:
+	  ecsappLoadBalancerDNS5062C85D:
+		Value:
+		  Fn::GetAtt:
+			- ecsappLB2FC258F5
+			- DNSName
+	  ecsappServiceURL3973F0E2:
+		Value:
+		  Fn::Join:
+			- ""
+			- - http://
+			  - Fn::GetAtt:
+				  - ecsappLB2FC258F5
+				  - DNSName
+	Conditions:
+	  CDKMetadataAvailable:
+		Fn::Or:
+		  - Fn::Or:
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - ap-east-1
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - ap-northeast-1
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - ap-northeast-2
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - ap-south-1
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - ap-southeast-1
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - ap-southeast-2
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - ca-central-1
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - cn-north-1
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - cn-northwest-1
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - eu-central-1
+		  - Fn::Or:
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - eu-north-1
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - eu-west-1
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - eu-west-2
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - eu-west-3
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - me-south-1
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - sa-east-1
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - us-east-1
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - us-east-2
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - us-west-1
+			  - Fn::Equals:
+				  - Ref: AWS::Region
+				  - us-west-2
+	```
 	
 출력된 CloudFormation 템플릿에는 다음 리소스들이 포함되어 있습니다.
 	- AWS::ElasticLoadBalancingV2
@@ -229,21 +851,74 @@ Network, ECS 를 생성하기 위해 필요한 CDK 패키지를 설치하고, �
 
 	명령을 실행하면 다음과 같은 경고 메시지가 표시됩니다.
 	
-	> **그림**
+	```bash
+	This deployment will make potentially sensitive changes according to your current security approval level (--require-approval broadening).
+	Please confirm you intend to make the following modifications:
+
+	IAM Statement Changes
+	┌───┬────────────────────────────────────────┬────────┬────────────────────────────────────────┬──────────────────────────────────────────┬───────────┐
+	│   │ Resource                               │ Effect │ Action                                 │ Principal                                │ Condition │
+	├───┼────────────────────────────────────────┼────────┼────────────────────────────────────────┼──────────────────────────────────────────┼───────────┤
+	│ + │ ${ecsapp/TaskDef/ExecutionRole.Arn}    │ Allow  │ sts:AssumeRole                         │ Service:ecs-tasks.amazonaws.com          │           │
+	├───┼────────────────────────────────────────┼────────┼────────────────────────────────────────┼──────────────────────────────────────────┼───────────┤
+	│ + │ ${ecsapp/TaskDef/TaskRole.Arn}         │ Allow  │ sts:AssumeRole                         │ Service:ecs-tasks.amazonaws.com          │           │
+	├───┼────────────────────────────────────────┼────────┼────────────────────────────────────────┼──────────────────────────────────────────┼───────────┤
+	│ + │ ${ecsapp/TaskDef/web/LogGroup.Arn}     │ Allow  │ logs:CreateLogStream                   │ AWS:${ecsapp/TaskDef/ExecutionRole}      │           │
+	│   │                                        │        │ logs:PutLogEvents                      │                                          │           │
+	├───┼────────────────────────────────────────┼────────┼────────────────────────────────────────┼──────────────────────────────────────────┼───────────┤
+	│ + │ *                                      │ Allow  │ ecr:GetAuthorizationToken              │ AWS:${ecsapp/TaskDef/ExecutionRole}      │           │
+	├───┼────────────────────────────────────────┼────────┼────────────────────────────────────────┼──────────────────────────────────────────┼───────────┤
+	│ + │ arn:${AWS::Partition}:ecr:${AWS::Regio │ Allow  │ ecr:BatchCheckLayerAvailability        │ AWS:${ecsapp/TaskDef/ExecutionRole}      │           │
+	│   │ n}:${AWS::AccountId}:repository/aws-cd │        │ ecr:BatchGetImage                      │                                          │           │
+	│   │ k/assets                               │        │ ecr:GetDownloadUrlForLayer             │                                          │           │
+	└───┴────────────────────────────────────────┴────────┴────────────────────────────────────────┴──────────────────────────────────────────┴───────────┘
+	Security Group Changes
+	┌───┬─────────────────────────────────────────┬─────┬────────────┬─────────────────────────────────────────┐
+	│   │ Group                                   │ Dir │ Protocol   │ Peer                                    │
+	├───┼─────────────────────────────────────────┼─────┼────────────┼─────────────────────────────────────────┤
+	│ + │ ${ecsapp/LB/SecurityGroup.GroupId}      │ In  │ TCP 80     │ Everyone (IPv4)                         │
+	│ + │ ${ecsapp/LB/SecurityGroup.GroupId}      │ Out │ TCP 80     │ ${ecsapp/Service/SecurityGroup.GroupId} │
+	├───┼─────────────────────────────────────────┼─────┼────────────┼─────────────────────────────────────────┤
+	│ + │ ${ecsapp/Service/SecurityGroup.GroupId} │ In  │ TCP 80     │ ${ecsapp/LB/SecurityGroup.GroupId}      │
+	│ + │ ${ecsapp/Service/SecurityGroup.GroupId} │ Out │ Everything │ Everyone (IPv4)                         │
+	└───┴─────────────────────────────────────────┴─────┴────────────┴─────────────────────────────────────────┘
+	(NOTE: There may be security-related changes not in this list. See https://github.com/aws/aws-cdk/issues/1299)
+
+	Do you wish to deploy these changes (y/n)? 
+	```
 	
-	이 경고 메시지는 앱을 배포하게 되면 발생할 수 있는 위험 요소를 표시합니다. 실습에 필요한 S3에 대한 퍼블릭 접근 권한 허용에 대한 허용입니다. y를 입력하여 스택을 배포하고 관련된 자원을 생성합니다.
+	이 경고 메시지는 앱을 배포하게 되면 발생할 수 있는 위험 요소를 표시합니다. 실습에 필요한 S3에 대한 퍼블릭 접근 권한 허용에 대한 허용입니다. **y**를 입력하여 스택을 배포하고 관련된 자원을 생성합니다.
 	
 	Base 스택 배포가 정상적으로 이루어진 경우 다음과 같은 출력 메시지가 표시됩니다. ACCOUNT-ID는 사용자의 어카운트 ID, REGION은 앱이 생성된 리전, STACK-ID는 스택의 고유 식별자가 표시됩니다.
+
+	```bash
+	CdkEcsStack: creating CloudFormation changeset...
+
+	   CdkEcsStack
+
+	Outputs:
+	CdkEcsStack.ecsappServiceURL3973F0E2 = http://CdkEc-ecsap-1UWVC20NABHD-1936266020.us-west-2.elb.amazonaws.com
+	CdkEcsStack.ecsappLoadBalancerDNS5062C85D = CdkEc-ecsap-1UWVC20NABHD-1936266020.us-west-2.elb.amazonaws.com
+
+	Stack ARN:
+	arn:aws:cloudformation:us-west-2:270867796616:stack/CdkEcsStack/52a47720-c24a-11ea-8c45-02e40fd26800	
+	```
 	
 ## CloudFormation 콘솔
 
 CDK 앱은 AWS CloudFormation을 통해 배포됩니다. 각 CDK 스택은 CloudFormation 스택과 1:1로 매핑됩니다. AWS CloudFormation 콘솔에 접근하여 생성된 CdkEcsStack 스택을 확인합니다. 문제가 있는 경우는 리전 정보가 맞는지 확인합니다.
 
-> **그림**
+> ![Alt](./images/cdk-cloudformation-stack.PNG "cdk cloudformtation")
 
 Resources 탭을 선택하면, 생성된 리소스의 Physical ID를 확인할 수 있습니다.
 
-> **그림**
+> ![Alt](./images/cdk-cloudformation-stack-resource.PNG "cdk cloudformtation resource")
+
+# AWS CodeSeries 로 ECS CICD 파이프라인 만들기
+
+> **여기서는 개발환경(IDE)의 어플리케이션 코드를 AWS CodeCommit 리포지토리와 연결하고 AWS의 CodeSeries 서비스로 ECS CICD 파이프라인을 만드는 방법을 살펴봅니다.**
+>
+> **또한 코드 변경시 CodePipeline을 통해 변경된 코드를 자동으로 서비스에 배포하는 실습을 해봅니다.**
 
 # CodeCommit 리포지토리 생성하기
 
@@ -251,7 +926,7 @@ Resources 탭을 선택하면, 생성된 리소스의 Physical ID를 확인할 �
 
 2. Repositories 페이지에서 Create repository를 선택합니다.
 
-3. 리포지토리 생성 페이지의 Name에 **dogs**  등과 같이 입력합니다. 이미 존재하는 repository면 다른 이름을 넣어서 생성합니다.
+3. 리포지토리 생성 페이지의 Name에 **devopshol** 등과 같이 입력합니다. 이미 존재하는 repository면 다른 이름을 넣어서 생성합니다.
 
 4. (선택 사항) 설명에 리포지토리 설명을 입력합니다. 그러면 사용자들이 리포지토리의 용도를 식별하는 데 도움이 됩니다.
 
@@ -277,7 +952,7 @@ Resources 탭을 선택하면, 생성된 리소스의 Physical ID를 확인할 �
 
 1. [https://console.aws.amazon.com/codesuite/codecommit/home](https://console.aws.amazon.com/codesuite/codecommit/home) 에서 CodeCommit 콘솔을 엽니다.
 
-2. 오른쪽 상단에서 리전 선택메뉴에서 Seoul 리전을 선택합니다. 리포지토리는 한 AWS 리전에 국한됩니다.
+2. 오른쪽 상단에서 리전 선택메뉴에서 Oregon 리전을 선택합니다. 리포지토리는 한 AWS 리전에 국한됩니다.
 
 3. 목록에서 연결하려는 리포지토리명을 클릭합니다. 그러면 해당 리포지토리의 코드 페이지가 열립니다.
 
@@ -285,63 +960,45 @@ Resources 탭을 선택하면, 생성된 리소스의 Physical ID를 확인할 �
 
     ![Alt](./images/copy-codecommit-repo-url.png "generate git credential")
 
-5. Amazon EC2 Workstation 의 터미널 화면으로 이동 후, 아래 명령어로 git 를 설치합니다.
+5. Cloud9 의 터미널 화면으로 이동 후, 아래 명령어로 environment 디렉토리로 이동합니다.
 
 	```bash
-	sudo yum install -y git
+	cd ~/environment
 	```
 	
-6. 사용자의 홈 디렉토리 아래 dogs 디렉토리를 만들고 해당 디렉토리로 이동합니다. 터미널에서 아래의 명령어를 실행합니다.
+6. 터미널 화면에서 위의 4에서 복사한 명령어를 붙여넣고 실행합니다.
 
-     ```bash
-     cd ~
-     ```
+    ```bash
+	git clone https://git-codecommit.us-west-2.amazonaws.com/v1/repos/devopshol
+	```
+	
+	그럼 다음과 같은 화면을 볼 수 있습니다.
+	
+	```bash
+	Cloning into 'devopshol'...
+	warning: You appear to have cloned an empty repository.
+	Username for 'https://git-codecommit.us-west-2.amazonaws.com':
+    ```
 
-7. 터미널 화면에서 위의 4에서 복사한 명령어를 붙여넣고 실행합니다. 그럼 다음과 같은 화면을 볼 수 있습니다.
+7. Code Commit에서 사용할 HTTPS Git Credential(자격증명) 생성하기 항목에서 생성한 Git Credential 파일을 열어서 User Name과 Password를 보고 터미털에 복사해서 붙여넣기 합니다. 정상적으로 입력했다면 다음과 같은 화면을 볼 수 있습니다.
 
-     ```bash
-     [ec2-user@ip-10-0-1-54 ~]$ git clone https://git-codecommit.ap-northeast-2.amazonaws.com/v1/repos/dogs
-     Cloning into 'dogs'...
-Username for 'https://git-codecommit.ap-northeast-2.amazonaws.com':
-     ```
-
-8. Code Commit에서 사용할 HTTPS Git Credential(자격증명) 생성하기 항목에서 생성한 Git Credential 파일을 열어서 User Name과 Password를 보고 터미털에 복사해서 붙여넣기 합니다. 정상적으로 입력했다면 다음과 같은 화면을 볼 수 있습니다.
-
-     ```bash
+	```bash
      warning: You appear to have cloned an empty repository.
-     ```
+	```
 
-9. 정상적으로 Code Commit 리포지토리를 생성하였으며 테스트를 완료했습니다.
+8. 정상적으로 Code Commit 리포지토리를 생성하였으며 테스트를 완료했습니다.
 
 # Code Commit Repository에 Dockefile 및 buildspec.yaml 추가하기
 
 ## buildspec.yaml 추가하기
 
-1. Amazon EC2 Workstation의 터미널 창에서 다음의 명령어를 실행하여 dogs 디렉토리의 파일을 확인합니다.
+1. Cloud9 의 터미널 창에서 다음의 명령어를 실행하여 앞서 생성된 Git 디렉토리로 이동합니다.
 
     ```bash
-    ls -al ~/catsdogs/dogs/
+    cd devopshol
     ```
 
-2. 다음의 명령어를 실행하여 dogs 디렉토리의 파일들을 복사 해옵니다.
-
-    ```bash
-    cp ~/catsdogs/dogs/* ./
-    ```
-
-	복사한 파일들을 확인 합니다.
-
-    ```bash
-    ls -al
-    total 12
-	drwxrwxr-x 3 ec2-user ec2-user   96 Mar 31 08:48 .
-	drwx------ 9 ec2-user ec2-user  272 Mar 31 08:52 ..
-	-rw-rw-r-- 1 ec2-user ec2-user  343 Mar 31 08:39 default.conf
-	-rw-rw-r-- 1 ec2-user ec2-user  333 Mar 31 08:39 Dockerfile
-	-rw-rw-r-- 1 ec2-user ec2-user  117 Mar 31 08:48 index.html
-    ```
-
-3. 다음의 명령어를 실행하여 git repository의 상태를 확인합니다.
+2. 다음의 명령어를 실행하여 git repository의 상태를 확인합니다.
 
     ```bash
     git status
@@ -357,60 +1014,81 @@ Username for 'https://git-codecommit.ap-northeast-2.amazonaws.com':
     nothing to commit (create/copy files and use "git add" to track)
     ```
 
-4. vi 커멘드 등으로 **buildspec.yml" 파일을 추가합니다.
+3. 다음의 명령어를 실행하여 imgsrc 디렉토리의 Docker 파일을 복사 해옵니다.
 
-    > 대소문자에 유의해서 입력합니다. 파일명은 **buildspec.yml** 입니다.
+	```bash
+	cp ~/environment/imgsrc/Dockerfile ./
+	```
+	
+4. 워크스페이스의 왼쪽 메뉴 탐색창에서 repository의 디렉토리를 선택하고 마우스 오른쪽 버튼을 눌러서 New File 메뉴를 눌러 새로운 파일을 추가합니다. 다시 오른쪽 버튼을 눌러 Rename을 선택하고 파일 이름을 **buildspec.yml** 로 지정합니다.
 
-5. 다음의 내용을 복사합하여 붙여넣고 저장합니다.
+	> 대소문자에 유의해서 입력합니다. 파일명은 **buildspec.yml** 입니다.
+
+	![Alt](./images/cloud9-new-file.PNG "add buildspec")
+
+5. buildspec.yml 을 더블클릭해서 편집창을 열고 다음의 내용을 복사하여 붙여넣고 저장합니다.
 
     > 들여쓰기 및 띄워쓰기 간격이 아래의 텍스트와 동일하도록 입력합니다!
 
     ```yaml
-    version: 0.2
+	version: 0.2
 
-    phases:
-      pre_build:
-        commands:
-          - echo Logging in to Amazon ECR...
-          - aws --version
-          - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-          - REPOSITORY_URI=<YOUR_ACCOUNT_ID>.dkr.ecr.ap-northeast-2.amazonaws.com/dogs 
-          - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-          - IMAGE_TAG=${COMMIT_HASH:=latest}
-      build:
-        commands:
-          - echo Build started on `date`
-          - echo Building the Docker image...
-          - docker build -t $REPOSITORY_URI:latest .
-          - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
-      post_build:
-        commands:
-          - echo Build completed on `date`
-          - echo Pushing the Docker images...
-          - docker push $REPOSITORY_URI:latest
-          - docker push $REPOSITORY_URI:$IMAGE_TAG
-          - echo Writing image definitions file...
-          - printf '[{"name":"dogs","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-    artifacts:
-        files: imagedefinitions.json
+	phases:
+	  pre_build:
+		commands:
+		  - echo Logging in to Amazon ECR...
+		  - aws --version
+		  - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+		  - REPOSITORY_URI=<YOUR_ACCOUNT_ID>.dkr.ecr.us-west-2.amazonaws.com/aws-cdk/assets 
+		  - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+		  - IMAGE_TAG=${COMMIT_HASH:=latest}
+	  build:
+		commands:
+		  - echo Build started on `date`
+		  - echo Building the Docker image...
+		  - docker build -t $REPOSITORY_URI:latest .
+		  - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+	  post_build:
+		commands:
+		  - echo Build completed on `date`
+		  - echo Pushing the Docker images...
+		  - docker push $REPOSITORY_URI:latest
+		  - docker push $REPOSITORY_URI:$IMAGE_TAG
+		  - echo Writing image definitions file...
+		  - printf '[{"name":"web","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG >     imagedefinitions.json
+	artifacts:
+		files: imagedefinitions.json
     ```
 
 6. phases -> pre_build -> commands 의 4번째 라인의 "\<YOUR_ACCOUNT_ID\>" 대신에 본인의 AWS 어카운트 ID를 입력하고 앞에서 생성한 ECR 리포지토리의 주소를 입력합니다. 다음과 같은 형식이 됩니다.
 
-    > "- REPOSITORY_URI=270867796616.dkr.ecr.ap-northeast-2.amazonaws.com/dogs"
+    > "- REPOSITORY_URI=9999999999.dkr.ecr.us-west-2.amazonaws.com/aws-cdk/assets"
 
-7. vi 커멘드 등으로 index.html 코드에 변경을 가하기 위해 다음의 내용을 복사하여 붙여넣고 저장합니다.
+7. phases -> post_build -> commands 의 마지막 라인의 printf 의 name 이 컨테이너의 이름과 일치하는지 확인합니다.
+
+	Cloud9의 워크스페이스에서 Task Definition 을 List 합니다.
 
 	```bash
-    <html>
-	<head>
-	<title>Welcome to Cats and Dogs DemoGo</title>
-	</head>
-	<body>
-	<h1>DemoGo Dogs</h1>
-    </body>
-	</html>
-    ```
+	aws ecs list-task-definitions
+	```
+	
+	List 된 Task Definition 으로 상세 내역을 확인 합니다. Task Definition 에서 Version 을
+	
+	```bash
+	aws ecs describe-task-definition --task-definition <Task Definition>
+	```
+	
+	Output 은 다음과 같습니다. 결과 창에 taskDefinition -> containerDefinitions -> name 에서 컨테이너 이름을 찾을 수 있습니다.
+	
+	```bash
+	{
+		"taskDefinition": {
+			"taskDefinitionArn": "arn:aws:ecs:us-west-2:270867796616:task-definition/CdkEcsStackecsappTaskDefCE136462:1",
+			"containerDefinitions": [
+				{
+					"name": "web",
+					"image": "9999999999.dkr.ecr.us-west-2.amazonaws.com/aws-cdk/assets:7355c642ffb4f29ad3270368c55c04c3ed2032deec01c23e9720a87f05477f9d",
+	```
 	
 8. buildspec 및 Dockerfile 파일을 커밋한 후에 소스 리포지토리에 푸쉬 합니다. 다음을 참조하여 username과 email 주소를 설정합니다.
 
@@ -418,13 +1096,13 @@ Username for 'https://git-codecommit.ap-northeast-2.amazonaws.com':
 
     ```bash
 	pwd
-    cd ~/dogs/
+    cd ~/environment/devopshol
     ```
 
     - git crendential을 저장하기 위하여 다음과 같이 user name과 email을 글로벌로 설정합니다.
 
     ```bash
-    git config --global user.name "DemoGo amazon"
+    git config --global user.name "devops amazon"
     git config --global user.email "example@amazon.com"
     ```
 
@@ -450,16 +1128,15 @@ Username for 'https://git-codecommit.ap-northeast-2.amazonaws.com':
     - 다음과 같은 화면을 볼 수 있습니다.
 
     ```bash
-    Enumerating objects: 6, done.
-	Counting objects: 100% (6/6), done.
-	Compressing objects: 100% (6/6), done.
-	Writing objects: 100% (6/6), 1.27 KiB | 1.27 MiB/s, done.
-	Total 6 (delta 0), reused 0 (delta 0)
-	To https://git-codecommit.ap-northeast-2.amazonaws.com/v1/repos/dogs
-	* [new branch]      master -> master
+	Counting objects: 4, done.
+	Compressing objects: 100% (4/4), done.
+	Writing objects: 100% (4/4), 841 bytes | 841.00 KiB/s, done.
+	Total 4 (delta 0), reused 0 (delta 0)
+	To https://git-codecommit.us-west-2.amazonaws.com/v1/repos/devopshol
+	 * [new branch]      master -> master
     ```
 
-9. 다음 링크를 통해서 이동하여 정상적으로 푸쉬된 파일들을 확인해 봅니다. [https://ap-northeast-2.console.aws.amazon.com/codesuite/codecommit/repositories?region=ap-northeast-2](https://ap-northeast-2.console.aws.amazon.com/codesuite/codecommit/repositories?region=ap-northeast-2)
+9. 다음 링크를 통해서 이동하여 정상적으로 푸쉬된 파일들을 확인해 봅니다. [https://us-west-2.console.aws.amazon.com/codesuite/codecommit/repositories?region=us-west-2](https://us-west-2.console.aws.amazon.com/codesuite/codecommit/repositories?region=us-west-2)
 
 # Cope Pipeline을 생성하여 ECS에 지속적인 배포하기
 
@@ -483,7 +1160,7 @@ Username for 'https://git-codecommit.ap-northeast-2.amazonaws.com':
 
     - Source provider: **AWS CodeCommit**
 
-    - Repository name: **dogs**
+    - Repository name: **devopshol**
 
     - Branch Name: **master**
 
@@ -492,24 +1169,24 @@ Username for 'https://git-codecommit.ap-northeast-2.amazonaws.com':
 3. Add build stage에서는 다음과 같이 입력을 하고 Next 버튼을 누릅니다.
   
     - Build provider: **AWS CodeBuild**
-    - Region: **Asia Pacific - (Seoul)**
+    - Region: **US West - (Oregon)**
     - Project name 오른쪽의 Create a new build project를 선택합니다. 빌드 프로젝트 생성시에는 다음과 같이 입력 및 선택을 하고 나머지는 디폴트로 둡니다
-        - Project Name: hol-build
+        - Project Name: devops-hol
         - Environment Image: **Managed Image**
         - Operating System: **Ubuntu**
         - Runtime: **Standard**
         - Image: **aws/codebuild/standard:1.0**
         - **Privileged 옵션 체크**
-        > Privileged 옵셥을 체크하지 않는다면 Code build에서 도커 이미지를 빌드할 수 없습니다
+        > **Privileged 옵셥을 체크하지 않는다면 Code build에서 도커 이미지를 빌드할 수 없습니다**
         - Continue to CodePipeline 버튼을 누릅니다
     - Add build stage 화면으로 돌아와 Next버튼을 누릅니다
-        > 마법사가 빌드 프로젝트에 대해 codebuild-hol-build-service-role과 같은 형식의 CodeBuild 서비스 역할을 생성합니다. 이 역할 이름은 나중에 Amazon ECR 권한을 역할에 추가할 때 필요하므로 메모해 둡니다.
+        > 마법사가 빌드 프로젝트에 대해 codebuild-devopshol-service-role과 같은 형식의 CodeBuild 서비스 역할을 생성합니다. 이 역할 이름은 나중에 Amazon ECR 권한을 역할에 추가할 때 필요하므로 메모해 둡니다.
 
-4. Add to deploy stage에서는 다음과 같이 입력을 합니다. 나머지는 디폴트로 남겨둡니다.
+4. Add to deploy stage에서는 다음과 같이 선택 합니다. 나머지는 디폴트로 남겨둡니다.
     - Deploy provider : **Amazon ECS**
-    - Region: **Asia Pacific - (Seoul)**
-    - Cluster name: **DEMOGO-ECS**
-    - Service name: **dogs**
+    - Region: **US West (Oregon) **
+    - Cluster name: **CdkEcsStack-clusterxxxxxxxxxx**
+    - Service name: **CdkEcsStack-ecsappServicexxxxxxxxxx**
 
 5. 리뷰 페이지에서 파이프라인 구성을 검토하고 Create Pipeline(파이프라인 생성)을 선택하여 파이프라인을 생성합니다.
 
@@ -521,7 +1198,7 @@ Username for 'https://git-codecommit.ap-northeast-2.amazonaws.com':
 
 2. 왼쪽 탐색 창에서 역할을 선택합니다.
 
-3. 검색란에 codebuild-를 입력하고 CodePipeline 마법사가 생성한 역할을 선택합니다. 이 핸즈온랩에서의 역할이름은 **codebuild-dogs-build-service-role**입니다.
+3. 검색란에 codebuild-를 입력하고 CodePipeline 마법사가 생성한 역할을 선택합니다. 이 핸즈온랩에서의 역할이름은 **codebuild-devopshol-service-role**입니다.
 
 4. Summary(요약) 페이지에서 Attach policies (정책 연결)을 선택합니다.
 
@@ -529,40 +1206,32 @@ Username for 'https://git-codecommit.ap-northeast-2.amazonaws.com':
 
 ## 파이프라인 테스트하기
 
-1. 다음의 링크로 [https://ap-northeast-2.console.aws.amazon.com/codesuite/codepipeline/pipelines?region=ap-northeast-2](https://ap-northeast-2.console.aws.amazon.com/codesuite/codepipeline/pipelines?region=ap-northeast-2) 이동하여 dogs-cicd를 선택하고 오른쪽 상단의 release changes를 선택합니다.
+1. 다음의 링크로 [https://us-west-2.console.aws.amazon.com/codesuite/codepipeline/pipelines?region=us-west-2](https://us-west-2.console.aws.amazon.com/codesuite/codepipeline/pipelines?region=us-west-2) 이동하여 devopshol 을 선택하고 오른쪽 상단의 release changes를 선택합니다.
 
     ![Alt](./images/run-release.png "view service status")
 
-2. 파이프라인이 배포까지 정상적으로 수행되면 다음고 같은 화면을 볼 수 있습니다.
+2. 파이프라인이 배포까지 정상적으로 수행되면 다음과 같은 화면을 볼 수 있습니다.
 
     ![Alt](./images/view-result.png "view service result")
 
-3. 정상적으로 배포되었다면 [https://ap-northeast-2.console.aws.amazon.com/ec2/v2/home?region=ap-northeast-2#LoadBalancers:sort=loadBalancerName](https://ap-northeast-2.console.aws.amazon.com/ec2/v2/home?region=ap-northeast-2#LoadBalancers:sort=loadBalancerName) 에서 demogo-alb를 선택한후에 Description 탭의 DNS name을 복사하여 웹 브라우저에 붙여넣고, Dogs 화면 클릭시 "DemoGo Dogs" 텍스트가 정상적으로 뜨는지 확인합니다. 변경사항이 반영되지 않은 경우 페이지 새로 고침 F5 을 해보시기 바랍니다.
+3. 정상적으로 배포되었다면 [https://us-west-2.console.aws.amazon.com/ec2/v2/home?region=us-west-2#LoadBalancers:sort=loadBalancerName](https://us-west-2.console.aws.amazon.com/ec2/v2/home?region=us-west-2#LoadBalancers:sort=loadBalancerName) 에서 CdkEc로 시작하는 LB를 선택한후에 Description 탭의 DNS name을 복사하여 웹 브라우저에 붙여넣고 "DevOps HoL"가 정상적으로 뜨는지 확인합니다. 변경사항이 반영되지 않은 경우 페이지 새로 고침 F5 을 해보시기 바랍니다.
 
-4. 이번에는 구성된 소스 리포지토리에 대한 코드를 변경하고 커밋한 후 변경 사항을 푸시합니다. Amazon EC2 Workstation 터미널에서 index.html 소스를 다음과 같이 수정합니다.
+4. 이번에는 구성된 소스 리포지토리에 대한 코드를 변경하고 커밋한 후 변경 사항을 푸시합니다. Cloud9 워크 스페이스에서 왼쪽의 탐색창에서 Dockerfile을 찾아서 더블 클릭하여 편집창을 열고 다음과 같이 수정합니다.
 
-   - dogs 소스 디렉토리로 이동합니다.
+   - 다음과 같이 수정합니다.
 	```bash
-	cd ~/dogs
+	FROM nginx:latest
+	RUN  echo '<h1>DevOps HoL v2</h1>' \
+	>> index.html
+	RUN cp /index.html /usr/share/nginx/html
 	```
-   - index.html을 다음과 같이 수정합니다.
 
-    ```bash
-    <html>
-	<head>
-	<title>Welcome to Cats and Dogs DemoGo</title>
-	</head>
-	<body>
-	<h1>DemoGo Dogs - v2</h1>
-    </body>
-	</html>
-    ```
-
-5. 다음과 같은 명령어로 다시 소스를 커밋하고 푸쉬합니다.
+5. Cloud9의 워크 스페이스에서 다음과 같은 명령어로 다시 소스를 커밋하고 푸쉬합니다.
 
    - 소스를 추가하고 커밋합니다.
 
     ```bash
+	cd ~/environment/devopshol
     git commit -am "modify html"
     ```
 
@@ -575,7 +1244,7 @@ Username for 'https://git-codecommit.ap-northeast-2.amazonaws.com':
 
 6. 정상적으로 푸쉬가 되었다면 commit hook으로 인하여 Code Pipeline이 자동으로 실행이 됩니다.
 
-7. [https://ap-northeast-2.console.aws.amazon.com/ec2/v2/home?region=ap-northeast-2#LoadBalancers:sort=loadBalancerName](https://ap-northeast-2.console.aws.amazon.com/ec2/v2/home?region=ap-northeast-2#LoadBalancers:sort=loadBalancerName) 로 이동하여 demogo-alb를 선택한후에 Description 탭의 DNS name을 복사하여 웹 브라우저에 붙여넣고, Dogs 화면 클릭시 "DemoGo Dogs - v2" 텍스트가 정상적으로 뜨는지 확인합니다. 변경사항이 반영되지 않은 경우 페이지 새로 고침 F5 을 해보시기 바랍니다.
+7. [https://us-west-2.console.aws.amazon.com/ec2/v2/home?region=us-west-2#LoadBalancers:sort=loadBalancerName](https://us-west-2.console.aws.amazon.com/ec2/v2/home?region=us-west-2#LoadBalancers:sort=loadBalancerName) 로 이동하여 CdkEc로 시작하는 LB를 선택한 후에 Description 탭의 DNS name을 복사하여 웹 브라우저에 붙여넣고 "DevOps HoL v2"가 정상적으로 뜨는지 확인합니다. 변경사항이 반영되지 않은 경우 페이지 새로 고침 F5 을 해보시기 바랍니다.
 
 실습을 완료하였습니다.
 
@@ -585,14 +1254,12 @@ Username for 'https://git-codecommit.ap-northeast-2.amazonaws.com':
 
 > 실습후 반드시 리소스들을 삭제합니다. 제대로 삭제를 하지 않는 다면 귀하의 계정으로 요금이 청구될 수 있습니다. 실습때 받은 credit이 있다면 등록을 해주시길 바랍니다.
 
-1. ALB 삭제
-2. Target Group 삭제
-3. ECS 서비스 삭제
-4. ECS Task Definition 삭제
-5. ECS 클러스터 삭제
-6. ECR 이미지 레지스트리 삭제
-7. Code Pipeline 삭제
-8. Code commit 리포지토리 삭제
-9. Code build 프로젝트 삭제
-10. VPC 삭제
-
+1. CodePipeline 삭제
+	- CodePipieline, BuildProject, CodeCommit
+2. S3 Bucket 삭제
+	- CodePipeline 버킷
+3. CDK 리소스 삭제
+	- Cdk-ecs 디렉토리에서 cdk destroy '*'
+4. ECR repositories 삭제
+5. Cloud9 삭제
+6. CloudFormation 삭제
