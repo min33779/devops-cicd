@@ -43,11 +43,11 @@
 3. Name 에 devopshol 등과 같은 형식으로 입력합니다. 다른 항목은 디폴트로 내버려둡니다.
 4. 워크스페이스 생성이 되면 welcome 탭을 닫고 새로운 터미널을 열어서 개발 환경을 커스터 마이징 합니다.
 
-     ![Alt](./images/cloud9-create-env.PNG "cloud9 before")
+     ![Alt](./images/cloud9-create-env.png "cloud9 before")
 
 5. 여러분의 워크스페이스는 다음과 같아 보여야합니다.:
 
-     ![Alt](./images/cloud9-workspace-ready.PNG "cloud9 afters")
+     ![Alt](./images/cloud9-workspace-ready.png "cloud9 afters")
 
 # 전체 아키텍처
 
@@ -131,7 +131,7 @@ TypeScript로 작성된 소스는 JavaScript로 컴파일 과정이 필요합니
 
 프로젝트의 경로 구조는 다음과 같습니다.
 
-	![Alt](./images/cloud9-project-structure.PNG "cdk project")
+	![Alt](./images/cloud9-project-structure.png "cdk project")
 
 	> bin/cdk-ecs.ts 는 CDK 앱의 진입점입니다. 
 	> package.json은 npm 모듈의 설정 파일입니다. 앱의 이름, 버전, 종속성, 빌드 스크립트(예, "watch", "build")등의 정보를 포함합니다. package-lock.json은 npm으로 설치되는 패키지에 대한 의존성을 가지고 있는 파일입니다. npm에 의해 자동으로 생성되고 관리되기 때문에 별도로 신경을 쓰지 않으셔도 됩니다
@@ -908,11 +908,11 @@ Network, ECS 를 생성하기 위해 필요한 CDK 패키지를 설치하고, �
 
 CDK 앱은 AWS CloudFormation을 통해 배포됩니다. 각 CDK 스택은 CloudFormation 스택과 1:1로 매핑됩니다. AWS CloudFormation 콘솔에 접근하여 생성된 CdkEcsStack 스택을 확인합니다. 문제가 있는 경우는 리전 정보가 맞는지 확인합니다.
 
-> ![Alt](./images/cdk-cloudformation-stack.PNG "cdk cloudformtation")
+> ![Alt](./images/cdk-cloudformation-stack.png "cdk cloudformtation")
 
 Resources 탭을 선택하면, 생성된 리소스의 Physical ID를 확인할 수 있습니다.
 
-> ![Alt](./images/cdk-cloudformation-stack-resource.PNG "cdk cloudformtation resource")
+> ![Alt](./images/cdk-cloudformation-stack-resource.png "cdk cloudformtation resource")
 
 # AWS CodeSeries 로 ECS CICD 파이프라인 만들기
 
@@ -1024,7 +1024,7 @@ Resources 탭을 선택하면, 생성된 리소스의 Physical ID를 확인할 �
 
 	> 대소문자에 유의해서 입력합니다. 파일명은 **buildspec.yml** 입니다.
 
-	![Alt](./images/cloud9-new-file.PNG "add buildspec")
+	![Alt](./images/cloud9-new-file.png "add buildspec")
 
 5. buildspec.yml 을 더블클릭해서 편집창을 열고 다음의 내용을 복사하여 붙여넣고 저장합니다.
 
