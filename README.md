@@ -224,13 +224,13 @@ Network, ECS 를 생성하기 위해 필요한 CDK 패키지를 설치하고, �
 
 스택에서 사용한 코드로 실제 인프라스트럭처를 생성해 보겠습니다. 
 
-CDK 앱에서 정의한 코드에 대한 CloudFormation 템플릿을 생성하기 위해 **cdk synth** 명령어를 실행합니다.
+	CDK 앱에서 정의한 코드에 대한 CloudFormation 템플릿을 생성하기 위해 **cdk synth** 명령어를 실행합니다.
 
 	```bash
 	cdk synth
 	```
 	
-실행 결과로 CloudFormation 템플릿이 출력되고 다음 리소스들이 포함되어 있습니다.
+	실행 결과로 CloudFormation 템플릿이 출력되고 다음 리소스들이 포함되어 있습니다.
 
 	- AWS::ElasticLoadBalancingV2
 	- AWS::ECS::TaskDefinition
@@ -443,35 +443,35 @@ Resources 탭을 선택하면, 생성된 리소스의 Physical ID를 확인할 �
 
     > 들여쓰기 및 띄워쓰기 간격이 아래의 텍스트와 동일하도록 입력합니다!
 
-	```yaml
-version: 0.2
+    ```yaml
+    version: 0.2
 
-phases:
-  pre_build:
-    commands:
-      - echo Logging in to Amazon ECR...
-      - aws --version
-      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-      - REPOSITORY_URI=270867796616.dkr.ecr.us-west-2.amazonaws.com/aws-cdk/assets 
-      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=${COMMIT_HASH:=latest}
-  build:
-    commands:
-      - echo Build started on `date`
-      - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
-  post_build:
-    commands:
-      - echo Build completed on `date`
-      - echo Pushing the Docker images...
-      - docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo Writing image definitions file...
-      - printf '[{"name":"web","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-artifacts:
-    files: imagedefinitions.json
-	```
+    phases:
+      pre_build:
+        commands:
+          - echo Logging in to Amazon ECR...
+          - aws --version
+          - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+          - REPOSITORY_URI=270867796616.dkr.ecr.us-west-2.amazonaws.com/aws-cdk/assets 
+          - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+          - IMAGE_TAG=${COMMIT_HASH:=latest}
+      build:
+        commands:
+          - echo Build started on `date`
+          - echo Building the Docker image...
+          - docker build -t $REPOSITORY_URI:latest .
+          - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      post_build:
+        commands:
+          - echo Build completed on `date`
+          - echo Pushing the Docker images...
+          - docker push $REPOSITORY_URI:latest
+          - docker push $REPOSITORY_URI:$IMAGE_TAG
+          - echo Writing image definitions file...
+          - printf '[{"name":"web","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+    artifacts:
+        files: imagedefinitions.json
+    ```
 
 6. phases -> pre_build -> commands 의 4번째 라인의 "\<YOUR_ACCOUNT_ID\>" 대신에 본인의 AWS 어카운트 ID를 입력하고 앞에서 생성한 ECR 리포지토리의 주소를 입력합니다. 다음과 같은 형식이 됩니다.
 
