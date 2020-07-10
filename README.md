@@ -444,33 +444,33 @@ Resources 탭을 선택하면, 생성된 리소스의 Physical ID를 확인할 �
     > 들여쓰기 및 띄워쓰기 간격이 아래의 텍스트와 동일하도록 입력합니다!
 
 	```yaml
-	version: 0.2
+version: 0.2
 
-	phases:
-	  pre_build:
-		commands:
-		  - echo Logging in to Amazon ECR...
-		  - aws --version
-		  - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-		  - REPOSITORY_URI=270867796616.dkr.ecr.us-west-2.amazonaws.com/aws-cdk/assets 
-		  - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-		  - IMAGE_TAG=${COMMIT_HASH:=latest}
-	  build:
-		commands:
-		  - echo Build started on `date`
-		  - echo Building the Docker image...
-		  - docker build -t $REPOSITORY_URI:latest .
-		  - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
-	  post_build:
-		commands:
-		  - echo Build completed on `date`
-		  - echo Pushing the Docker images...
-		  - docker push $REPOSITORY_URI:latest
-		  - docker push $REPOSITORY_URI:$IMAGE_TAG
-		  - echo Writing image definitions file...
-		  - printf '[{"name":"web","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-	artifacts:
-		files: imagedefinitions.json
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+      - REPOSITORY_URI=270867796616.dkr.ecr.us-west-2.amazonaws.com/aws-cdk/assets 
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t $REPOSITORY_URI:latest .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo Writing image definitions file...
+      - printf '[{"name":"web","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+artifacts:
+    files: imagedefinitions.json
 	```
 
 6. phases -> pre_build -> commands 의 4번째 라인의 "\<YOUR_ACCOUNT_ID\>" 대신에 본인의 AWS 어카운트 ID를 입력하고 앞에서 생성한 ECR 리포지토리의 주소를 입력합니다. 다음과 같은 형식이 됩니다.
