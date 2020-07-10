@@ -224,7 +224,7 @@ Network, ECS 를 생성하기 위해 필요한 CDK 패키지를 설치하고, �
 
 스택에서 사용한 코드로 실제 인프라스트럭처를 생성해 보겠습니다. 
 
-**cdk synth** 커맨드를 실행하여 CDK 앱에서 정의한 코드에 대한 CloudFormation 템플릿을 생성합니다.
+CDK 앱에서 정의한 코드에 대한 CloudFormation 템플릿을 생성하기 위해 **cdk synth** 명령어를 실행합니다.
 
 	```bash
 	cdk synth
@@ -468,7 +468,7 @@ Resources 탭을 선택하면, 생성된 리소스의 Physical ID를 확인할 �
 		  - docker push $REPOSITORY_URI:latest
 		  - docker push $REPOSITORY_URI:$IMAGE_TAG
 		  - echo Writing image definitions file...
-		  - printf '[{"name":"web","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG >     imagedefinitions.json
+		  - printf '[{"name":"web","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 	artifacts:
 		files: imagedefinitions.json
 	```
