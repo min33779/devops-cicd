@@ -1,4 +1,4 @@
-# DevOps for ECS Hands-On Lab
+﻿# DevOps for ECS Hands-On Lab
 
 > **본 Hands on Lab은 Oregon region( us-west-2 ) 을 기준으로 작성되었습니다. 실습을 하실 때 반드시 리전을 확인하기 바랍니다.**
 
@@ -67,13 +67,13 @@
 
 	```bash
 	mkdir cdk-ecs && cd cdk-ecs
-    ```
+	```
 	
 2. 새로운 TypeScript CDK 프로젝트를 생성하기 위해 cdk init 명령을 실행합니다.
 
 	```bash
 	cdk init --language typescript
-    ```
+	```
 	
 	실행 결과는 다음과 같습니다. (시스템에 git이 설치 되지 않은 경우, git repository 초기화와 관련된 경고가 나올 수 있습니다. 워크샵 실행에는 문제가 되지 않으니 계속 진행합니다)
 
@@ -93,7 +93,7 @@
 	 * `cdk deploy`      deploy this stack to your default AWS account/region
 	 * `cdk diff`        compare deployed stack with current state
 	 * `cdk synth`       emits the synthesized CloudFormation template
-    ```
+	```
 	
 	실행 결과에는 유용한 cdk 커맨드가 포함되어 있습니다.
 
@@ -107,13 +107,13 @@ TypeScript로 작성된 소스는 JavaScript로 컴파일 과정이 필요합니
 
 	```bash
 	cd cdk-ecs
-    ```
+	```
 
 3. 프로젝트에는 cdk init 과정을 거치며 watch라는 npm 스크립트가 설정되어 있습니다. 다음 명령을 실행합니다.
 
 	```bash
 	npm run watch
-    ```
+	```
 	
 4. 창 전체 내용이 갱신되어, 다음 내용을 확인할 수 있습니다.
 
@@ -121,7 +121,7 @@ TypeScript로 작성된 소스는 JavaScript로 컴파일 과정이 필요합니
 	[12:55:24 AM] File change detected. Starting incremental compilation...
 
 	[12:55:24 AM] Found 0 errors. Watching for file changes.
-    ```
+	```
 
 	npm run watch 실행 시 TypeScript 컴파일러(tsc)를 "watch" 모드로 시작합니다. 이 모드에서는 프로젝트 경로를 모니터링 하고,  변경된 내용이 포함된 .ts파일이 발생하면 .js파일로 자동 컴파일 합니다.
 
@@ -131,7 +131,7 @@ TypeScript로 작성된 소스는 JavaScript로 컴파일 과정이 필요합니
 
 프로젝트의 경로 구조는 다음과 같습니다.
 
-	![Alt](./images/cloud9-project-structure.png "cdk project")
+![Alt](./images/cloud9-project-structure.png "cdk project")
 
 	> bin/cdk-ecs.ts 는 CDK 앱의 진입점입니다. 
 	> package.json은 npm 모듈의 설정 파일입니다. 앱의 이름, 버전, 종속성, 빌드 스크립트(예, "watch", "build")등의 정보를 포함합니다. package-lock.json은 npm으로 설치되는 패키지에 대한 의존성을 가지고 있는 파일입니다. npm에 의해 자동으로 생성되고 관리되기 때문에 별도로 신경을 쓰지 않으셔도 됩니다
@@ -152,7 +152,7 @@ Network, ECS 를 생성하기 위해 필요한 CDK 패키지를 설치하고, �
 	npm install @aws-cdk/aws-ec2 --save
 	npm install @aws-cdk/aws-ecs –save
 	npm install @aws-cdk/aws-ecs-patterns --save
-    ```	
+	```	
 	
 2. 프로젝트 루트 디렉토리에 imgsrc 디렉토리를 생성하고 그 아래 파일을 생성합니다.
 
@@ -163,7 +163,7 @@ Network, ECS 를 생성하기 위해 필요한 CDK 패키지를 설치하고, �
 	RUN  echo '<h1>DevOps HoL</h1>' \
 	>> index.html
 	RUN cp /index.html /usr/share/nginx/html
-    ```	
+	```	
 	
 3. lib/cdk-ecs-stack.ts 파일의 내용을 아래의 코드로 변경합니다.
 
@@ -206,19 +206,19 @@ Network, ECS 를 생성하기 위해 필요한 CDK 패키지를 설치하고, �
 			});
 	  }
 	}
-    ```	
+	```	
 	
 	Fargate 스택 생성에는 CDK의 상위 레벨 생성자인 CDK 패턴을 사용합니다. 유용한 패턴에 대한 생성자를 제공하는 CDK 패턴을 이용해 다중 리소스를 한번에 생성할 수 있습니다.
 
 	Fargate 스택에서 생성하는 리소스의 상세 정보는 다음과 같습니다.
+	
 		- Application Load Balancer가 앞단에 붙은 ECS에서 동작하는 Fargate 서비스
-		- Public Application Load Balancer 생성
-		- 로컬 경로(./api)에 있는 Dockerfile을 이용해 컨테이너 이미지를 생성 
+		- Public Application Load Balancer 생성로컬 경로(./api)에 있는 Dockerfile을 이용해 컨테이너 이미지를 생성
 		- 생성된 이미지를 기반으로 태스크 정의
 		- 정의된 태스크를 기반으로 2개의 컨테이너 구성
 		- CloudWatch 로깅 환경 구성
 		- CPU, Memory 제약 설정
-		- 관련 CDK 코드	
+		- 관련 CDK 코드
 
 ## 리소스 합성
 
@@ -228,602 +228,14 @@ Network, ECS 를 생성하기 위해 필요한 CDK 패키지를 설치하고, �
 
 	```bash
 	cdk synth
-    ```
-	
-실행 결과는 아래와 같은 CloudFormation 템플릿이 출력됩니다.
-
-	```bash
-	Resources:
-	  vpcA2121C38:
-		Type: AWS::EC2::VPC
-		Properties:
-		  CidrBlock: 10.0.0.0/16
-		  EnableDnsHostnames: true
-		  EnableDnsSupport: true
-		  InstanceTenancy: default
-		  Tags:
-			- Key: Name
-			  Value: CdkEcsStack/vpc
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/Resource
-	  vpcPublicSubnet1Subnet2E65531E:
-		Type: AWS::EC2::Subnet
-		Properties:
-		  CidrBlock: 10.0.0.0/18
-		  VpcId:
-			Ref: vpcA2121C38
-		  AvailabilityZone:
-			Fn::Select:
-			  - 0
-			  - Fn::GetAZs: ""
-		  MapPublicIpOnLaunch: true
-		  Tags:
-			- Key: aws-cdk:subnet-name
-			  Value: Public
-			- Key: aws-cdk:subnet-type
-			  Value: Public
-			- Key: Name
-			  Value: CdkEcsStack/vpc/PublicSubnet1
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet1/Subnet
-	  vpcPublicSubnet1RouteTable48A2DF9B:
-		Type: AWS::EC2::RouteTable
-		Properties:
-		  VpcId:
-			Ref: vpcA2121C38
-		  Tags:
-			- Key: Name
-			  Value: CdkEcsStack/vpc/PublicSubnet1
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet1/RouteTable
-	  vpcPublicSubnet1RouteTableAssociation5D3F4579:
-		Type: AWS::EC2::SubnetRouteTableAssociation
-		Properties:
-		  RouteTableId:
-			Ref: vpcPublicSubnet1RouteTable48A2DF9B
-		  SubnetId:
-			Ref: vpcPublicSubnet1Subnet2E65531E
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet1/RouteTableAssociation
-	  vpcPublicSubnet1DefaultRoute10708846:
-		Type: AWS::EC2::Route
-		Properties:
-		  RouteTableId:
-			Ref: vpcPublicSubnet1RouteTable48A2DF9B
-		  DestinationCidrBlock: 0.0.0.0/0
-		  GatewayId:
-			Ref: vpcIGWE57CBDCA
-		DependsOn:
-		  - vpcVPCGW7984C166
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet1/DefaultRoute
-	  vpcPublicSubnet1EIPDA49DCBE:
-		Type: AWS::EC2::EIP
-		Properties:
-		  Domain: vpc
-		  Tags:
-			- Key: Name
-			  Value: CdkEcsStack/vpc/PublicSubnet1
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet1/EIP
-	  vpcPublicSubnet1NATGateway9C16659E:
-		Type: AWS::EC2::NatGateway
-		Properties:
-		  AllocationId:
-			Fn::GetAtt:
-			  - vpcPublicSubnet1EIPDA49DCBE
-			  - AllocationId
-		  SubnetId:
-			Ref: vpcPublicSubnet1Subnet2E65531E
-		  Tags:
-			- Key: Name
-			  Value: CdkEcsStack/vpc/PublicSubnet1
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet1/NATGateway
-	  vpcPublicSubnet2Subnet009B674F:
-		Type: AWS::EC2::Subnet
-		Properties:
-		  CidrBlock: 10.0.64.0/18
-		  VpcId:
-			Ref: vpcA2121C38
-		  AvailabilityZone:
-			Fn::Select:
-			  - 1
-			  - Fn::GetAZs: ""
-		  MapPublicIpOnLaunch: true
-		  Tags:
-			- Key: aws-cdk:subnet-name
-			  Value: Public
-			- Key: aws-cdk:subnet-type
-			  Value: Public
-			- Key: Name
-			  Value: CdkEcsStack/vpc/PublicSubnet2
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet2/Subnet
-	  vpcPublicSubnet2RouteTableEB40D4CB:
-		Type: AWS::EC2::RouteTable
-		Properties:
-		  VpcId:
-			Ref: vpcA2121C38
-		  Tags:
-			- Key: Name
-			  Value: CdkEcsStack/vpc/PublicSubnet2
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet2/RouteTable
-	  vpcPublicSubnet2RouteTableAssociation21F81B59:
-		Type: AWS::EC2::SubnetRouteTableAssociation
-		Properties:
-		  RouteTableId:
-			Ref: vpcPublicSubnet2RouteTableEB40D4CB
-		  SubnetId:
-			Ref: vpcPublicSubnet2Subnet009B674F
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet2/RouteTableAssociation
-	  vpcPublicSubnet2DefaultRouteA1EC0F60:
-		Type: AWS::EC2::Route
-		Properties:
-		  RouteTableId:
-			Ref: vpcPublicSubnet2RouteTableEB40D4CB
-		  DestinationCidrBlock: 0.0.0.0/0
-		  GatewayId:
-			Ref: vpcIGWE57CBDCA
-		DependsOn:
-		  - vpcVPCGW7984C166
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/PublicSubnet2/DefaultRoute
-	  vpcPrivateSubnet1Subnet934893E8:
-		Type: AWS::EC2::Subnet
-		Properties:
-		  CidrBlock: 10.0.128.0/18
-		  VpcId:
-			Ref: vpcA2121C38
-		  AvailabilityZone:
-			Fn::Select:
-			  - 0
-			  - Fn::GetAZs: ""
-		  MapPublicIpOnLaunch: false
-		  Tags:
-			- Key: aws-cdk:subnet-name
-			  Value: Private
-			- Key: aws-cdk:subnet-type
-			  Value: Private
-			- Key: Name
-			  Value: CdkEcsStack/vpc/PrivateSubnet1
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/PrivateSubnet1/Subnet
-	  vpcPrivateSubnet1RouteTableB41A48CC:
-		Type: AWS::EC2::RouteTable
-		Properties:
-		  VpcId:
-			Ref: vpcA2121C38
-		  Tags:
-			- Key: Name
-			  Value: CdkEcsStack/vpc/PrivateSubnet1
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/PrivateSubnet1/RouteTable
-	  vpcPrivateSubnet1RouteTableAssociation67945127:
-		Type: AWS::EC2::SubnetRouteTableAssociation
-		Properties:
-		  RouteTableId:
-			Ref: vpcPrivateSubnet1RouteTableB41A48CC
-		  SubnetId:
-			Ref: vpcPrivateSubnet1Subnet934893E8
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/PrivateSubnet1/RouteTableAssociation
-	  vpcPrivateSubnet1DefaultRoute1AA8E2E5:
-		Type: AWS::EC2::Route
-		Properties:
-		  RouteTableId:
-			Ref: vpcPrivateSubnet1RouteTableB41A48CC
-		  DestinationCidrBlock: 0.0.0.0/0
-		  NatGatewayId:
-			Ref: vpcPublicSubnet1NATGateway9C16659E
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/PrivateSubnet1/DefaultRoute
-	  vpcPrivateSubnet2Subnet7031C2BA:
-		Type: AWS::EC2::Subnet
-		Properties:
-		  CidrBlock: 10.0.192.0/18
-		  VpcId:
-			Ref: vpcA2121C38
-		  AvailabilityZone:
-			Fn::Select:
-			  - 1
-			  - Fn::GetAZs: ""
-		  MapPublicIpOnLaunch: false
-		  Tags:
-			- Key: aws-cdk:subnet-name
-			  Value: Private
-			- Key: aws-cdk:subnet-type
-			  Value: Private
-			- Key: Name
-			  Value: CdkEcsStack/vpc/PrivateSubnet2
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/PrivateSubnet2/Subnet
-	  vpcPrivateSubnet2RouteTable7280F23E:
-		Type: AWS::EC2::RouteTable
-		Properties:
-		  VpcId:
-			Ref: vpcA2121C38
-		  Tags:
-			- Key: Name
-			  Value: CdkEcsStack/vpc/PrivateSubnet2
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/PrivateSubnet2/RouteTable
-	  vpcPrivateSubnet2RouteTableAssociation007E94D3:
-		Type: AWS::EC2::SubnetRouteTableAssociation
-		Properties:
-		  RouteTableId:
-			Ref: vpcPrivateSubnet2RouteTable7280F23E
-		  SubnetId:
-			Ref: vpcPrivateSubnet2Subnet7031C2BA
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/PrivateSubnet2/RouteTableAssociation
-	  vpcPrivateSubnet2DefaultRouteB0E07F99:
-		Type: AWS::EC2::Route
-		Properties:
-		  RouteTableId:
-			Ref: vpcPrivateSubnet2RouteTable7280F23E
-		  DestinationCidrBlock: 0.0.0.0/0
-		  NatGatewayId:
-			Ref: vpcPublicSubnet1NATGateway9C16659E
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/PrivateSubnet2/DefaultRoute
-	  vpcIGWE57CBDCA:
-		Type: AWS::EC2::InternetGateway
-		Properties:
-		  Tags:
-			- Key: Name
-			  Value: CdkEcsStack/vpc
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/IGW
-	  vpcVPCGW7984C166:
-		Type: AWS::EC2::VPCGatewayAttachment
-		Properties:
-		  VpcId:
-			Ref: vpcA2121C38
-		  InternetGatewayId:
-			Ref: vpcIGWE57CBDCA
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/vpc/VPCGW
-	  cluster611F8AFF:
-		Type: AWS::ECS::Cluster
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/cluster/Resource
-	  ecsappLB2FC258F5:
-		Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-		Properties:
-		  Scheme: internet-facing
-		  SecurityGroups:
-			- Fn::GetAtt:
-				- ecsappLBSecurityGroupBA7090EC
-				- GroupId
-		  Subnets:
-			- Ref: vpcPublicSubnet1Subnet2E65531E
-			- Ref: vpcPublicSubnet2Subnet009B674F
-		  Type: application
-		DependsOn:
-		  - vpcPublicSubnet1DefaultRoute10708846
-		  - vpcPublicSubnet2DefaultRouteA1EC0F60
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/ecsapp/LB/Resource
-	  ecsappLBSecurityGroupBA7090EC:
-		Type: AWS::EC2::SecurityGroup
-		Properties:
-		  GroupDescription: Automatically created Security Group for ELB CdkEcsStackecsappLB20B8E7BA
-		  SecurityGroupIngress:
-			- CidrIp: 0.0.0.0/0
-			  Description: Allow from anyone on port 80
-			  FromPort: 80
-			  IpProtocol: tcp
-			  ToPort: 80
-		  VpcId:
-			Ref: vpcA2121C38
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/ecsapp/LB/SecurityGroup/Resource
-	  ecsappLBSecurityGrouptoCdkEcsStackecsappServiceSecurityGroup3A7FEC12803BEC0C48:
-		Type: AWS::EC2::SecurityGroupEgress
-		Properties:
-		  GroupId:
-			Fn::GetAtt:
-			  - ecsappLBSecurityGroupBA7090EC
-			  - GroupId
-		  IpProtocol: tcp
-		  Description: Load balancer to target
-		  DestinationSecurityGroupId:
-			Fn::GetAtt:
-			  - ecsappServiceSecurityGroup6251D712
-			  - GroupId
-		  FromPort: 80
-		  ToPort: 80
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/ecsapp/LB/SecurityGroup/to CdkEcsStackecsappServiceSecurityGroup3A7FEC12:80
-	  ecsappLBPublicListenerAE227035:
-		Type: AWS::ElasticLoadBalancingV2::Listener
-		Properties:
-		  DefaultActions:
-			- TargetGroupArn:
-				Ref: ecsappLBPublicListenerECSGroup5C3D922F
-			  Type: forward
-		  LoadBalancerArn:
-			Ref: ecsappLB2FC258F5
-		  Port: 80
-		  Protocol: HTTP
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/ecsapp/LB/PublicListener/Resource
-	  ecsappLBPublicListenerECSGroup5C3D922F:
-		Type: AWS::ElasticLoadBalancingV2::TargetGroup
-		Properties:
-		  Port: 80
-		  Protocol: HTTP
-		  TargetType: ip
-		  VpcId:
-			Ref: vpcA2121C38
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/ecsapp/LB/PublicListener/ECSGroup/Resource
-	  ecsappTaskDefTaskRoleF6B17925:
-		Type: AWS::IAM::Role
-		Properties:
-		  AssumeRolePolicyDocument:
-			Statement:
-			  - Action: sts:AssumeRole
-				Effect: Allow
-				Principal:
-				  Service: ecs-tasks.amazonaws.com
-			Version: "2012-10-17"
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/ecsapp/TaskDef/TaskRole/Resource
-	  ecsappTaskDef0D33E298:
-		Type: AWS::ECS::TaskDefinition
-		Properties:
-		  ContainerDefinitions:
-			- Essential: true
-			  Image:
-				Fn::Join:
-				  - ""
-				  - - Ref: AWS::AccountId
-					- .dkr.ecr.
-					- Ref: AWS::Region
-					- "."
-					- Ref: AWS::URLSuffix
-					- /aws-cdk/assets:7355c642ffb4f29ad3270368c55c04c3ed2032deec01c23e9720a87f05477f9d
-			  LogConfiguration:
-				LogDriver: awslogs
-				Options:
-				  awslogs-group:
-					Ref: ecsappTaskDefwebLogGroup33E744A7
-				  awslogs-stream-prefix: ecsapp
-				  awslogs-region:
-					Ref: AWS::Region
-			  Name: web
-			  PortMappings:
-				- ContainerPort: 80
-				  Protocol: tcp
-		  Cpu: "512"
-		  ExecutionRoleArn:
-			Fn::GetAtt:
-			  - ecsappTaskDefExecutionRoleA768A0D2
-			  - Arn
-		  Family: CdkEcsStackecsappTaskDefCE136462
-		  Memory: "1024"
-		  NetworkMode: awsvpc
-		  RequiresCompatibilities:
-			- FARGATE
-		  TaskRoleArn:
-			Fn::GetAtt:
-			  - ecsappTaskDefTaskRoleF6B17925
-			  - Arn
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/ecsapp/TaskDef/Resource
-	  ecsappTaskDefwebLogGroup33E744A7:
-		Type: AWS::Logs::LogGroup
-		UpdateReplacePolicy: Retain
-		DeletionPolicy: Retain
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/ecsapp/TaskDef/web/LogGroup/Resource
-	  ecsappTaskDefExecutionRoleA768A0D2:
-		Type: AWS::IAM::Role
-		Properties:
-		  AssumeRolePolicyDocument:
-			Statement:
-			  - Action: sts:AssumeRole
-				Effect: Allow
-				Principal:
-				  Service: ecs-tasks.amazonaws.com
-			Version: "2012-10-17"
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/ecsapp/TaskDef/ExecutionRole/Resource
-	  ecsappTaskDefExecutionRoleDefaultPolicy56A9AD66:
-		Type: AWS::IAM::Policy
-		Properties:
-		  PolicyDocument:
-			Statement:
-			  - Action:
-				  - ecr:BatchCheckLayerAvailability
-				  - ecr:GetDownloadUrlForLayer
-				  - ecr:BatchGetImage
-				Effect: Allow
-				Resource:
-				  Fn::Join:
-					- ""
-					- - "arn:"
-					  - Ref: AWS::Partition
-					  - ":ecr:"
-					  - Ref: AWS::Region
-					  - ":"
-					  - Ref: AWS::AccountId
-					  - :repository/aws-cdk/assets
-			  - Action: ecr:GetAuthorizationToken
-				Effect: Allow
-				Resource: "*"
-			  - Action:
-				  - logs:CreateLogStream
-				  - logs:PutLogEvents
-				Effect: Allow
-				Resource:
-				  Fn::GetAtt:
-					- ecsappTaskDefwebLogGroup33E744A7
-					- Arn
-			Version: "2012-10-17"
-		  PolicyName: ecsappTaskDefExecutionRoleDefaultPolicy56A9AD66
-		  Roles:
-			- Ref: ecsappTaskDefExecutionRoleA768A0D2
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/ecsapp/TaskDef/ExecutionRole/DefaultPolicy/Resource
-	  ecsappService3B1B03A6:
-		Type: AWS::ECS::Service
-		Properties:
-		  Cluster:
-			Ref: cluster611F8AFF
-		  DeploymentConfiguration:
-			MaximumPercent: 200
-			MinimumHealthyPercent: 50
-		  DesiredCount: 2
-		  EnableECSManagedTags: false
-		  HealthCheckGracePeriodSeconds: 60
-		  LaunchType: FARGATE
-		  LoadBalancers:
-			- ContainerName: web
-			  ContainerPort: 80
-			  TargetGroupArn:
-				Ref: ecsappLBPublicListenerECSGroup5C3D922F
-		  NetworkConfiguration:
-			AwsvpcConfiguration:
-			  AssignPublicIp: DISABLED
-			  SecurityGroups:
-				- Fn::GetAtt:
-					- ecsappServiceSecurityGroup6251D712
-					- GroupId
-			  Subnets:
-				- Ref: vpcPrivateSubnet1Subnet934893E8
-				- Ref: vpcPrivateSubnet2Subnet7031C2BA
-		  TaskDefinition:
-			Ref: ecsappTaskDef0D33E298
-		DependsOn:
-		  - ecsappLBPublicListenerECSGroup5C3D922F
-		  - ecsappLBPublicListenerAE227035
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/ecsapp/Service/Service
-	  ecsappServiceSecurityGroup6251D712:
-		Type: AWS::EC2::SecurityGroup
-		Properties:
-		  GroupDescription: CdkEcsStack/ecsapp/Service/SecurityGroup
-		  SecurityGroupEgress:
-			- CidrIp: 0.0.0.0/0
-			  Description: Allow all outbound traffic by default
-			  IpProtocol: "-1"
-		  VpcId:
-			Ref: vpcA2121C38
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/ecsapp/Service/SecurityGroup/Resource
-	  ecsappServiceSecurityGroupfromCdkEcsStackecsappLBSecurityGroup055394D380226851E0:
-		Type: AWS::EC2::SecurityGroupIngress
-		Properties:
-		  IpProtocol: tcp
-		  Description: Load balancer to target
-		  FromPort: 80
-		  GroupId:
-			Fn::GetAtt:
-			  - ecsappServiceSecurityGroup6251D712
-			  - GroupId
-		  SourceSecurityGroupId:
-			Fn::GetAtt:
-			  - ecsappLBSecurityGroupBA7090EC
-			  - GroupId
-		  ToPort: 80
-		Metadata:
-		  aws:cdk:path: CdkEcsStack/ecsapp/Service/SecurityGroup/from CdkEcsStackecsappLBSecurityGroup055394D3:80
-	  CDKMetadata:
-		Type: AWS::CDK::Metadata
-		Properties:
-		  Modules: aws-cdk=1.49.1,@aws-cdk/assets=1.51.0,@aws-cdk/aws-applicationautoscaling=1.51.0,@aws-cdk/aws-autoscaling=1.51.0,@aws-cdk/aws-autoscaling-common=1.51.0,@aws-cdk/aws-autoscaling-hooktargets=1.51.0,@aws-cdk/aws-certificatemanager=1.51.0,@aws-cdk/aws-cloudwatch=1.51.0,@aws-cdk/aws-ec2=1.51.0,@aws-cdk/aws-ecr=1.51.0,@aws-cdk/aws-ecr-assets=1.51.0,@aws-cdk/aws-ecs=1.51.0,@aws-cdk/aws-ecs-patterns=1.51.0,@aws-cdk/aws-elasticloadbalancingv2=1.51.0,@aws-cdk/aws-events=1.51.0,@aws-cdk/aws-events-targets=1.51.0,@aws-cdk/aws-iam=1.51.0,@aws-cdk/aws-kms=1.51.0,@aws-cdk/aws-lambda=1.51.0,@aws-cdk/aws-logs=1.51.0,@aws-cdk/aws-route53=1.51.0,@aws-cdk/aws-route53-targets=1.51.0,@aws-cdk/aws-s3=1.51.0,@aws-cdk/aws-s3-assets=1.51.0,@aws-cdk/aws-servicediscovery=1.51.0,@aws-cdk/aws-sns=1.51.0,@aws-cdk/aws-sns-subscriptions=1.51.0,@aws-cdk/aws-sqs=1.51.0,@aws-cdk/aws-ssm=1.51.0,@aws-cdk/cloud-assembly-schema=1.51.0,@aws-cdk/core=1.51.0,@aws-cdk/custom-resources=1.51.0,@aws-cdk/cx-api=1.51.0,@aws-cdk/region-info=1.51.0,jsii-runtime=node.js/v10.21.0
-		Condition: CDKMetadataAvailable
-	Outputs:
-	  ecsappLoadBalancerDNS5062C85D:
-		Value:
-		  Fn::GetAtt:
-			- ecsappLB2FC258F5
-			- DNSName
-	  ecsappServiceURL3973F0E2:
-		Value:
-		  Fn::Join:
-			- ""
-			- - http://
-			  - Fn::GetAtt:
-				  - ecsappLB2FC258F5
-				  - DNSName
-	Conditions:
-	  CDKMetadataAvailable:
-		Fn::Or:
-		  - Fn::Or:
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - ap-east-1
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - ap-northeast-1
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - ap-northeast-2
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - ap-south-1
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - ap-southeast-1
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - ap-southeast-2
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - ca-central-1
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - cn-north-1
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - cn-northwest-1
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - eu-central-1
-		  - Fn::Or:
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - eu-north-1
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - eu-west-1
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - eu-west-2
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - eu-west-3
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - me-south-1
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - sa-east-1
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - us-east-1
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - us-east-2
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - us-west-1
-			  - Fn::Equals:
-				  - Ref: AWS::Region
-				  - us-west-2
 	```
 	
-출력된 CloudFormation 템플릿에는 다음 리소스들이 포함되어 있습니다.
+실행 결과로 CloudFormation 템플릿이 출력되고 다음 리소스들이 포함되어 있습니다.
+
 	- AWS::ElasticLoadBalancingV2
 	- AWS::ECS::TaskDefinition
 	- AWS::Logs::LogGroup
-	- AWS::ECS::Service 
+	- AWS::ECS::Service
 
 ## 배포
 
@@ -833,13 +245,14 @@ Network, ECS 를 생성하기 위해 필요한 CDK 패키지를 설치하고, �
 
 	```bash
 	cdk bootstrap
-    ```
+	```
 	
 	실행결과는 다음과 같습니다.
 
 	```bash
 	Bootstrapping environment aws://9999999999/us-west-2...
-    ```
+	```
+
 	> 기존 AWS CDK 앱 실행 과정에서, AWS 환경(계정/리전)에 bootstrap 스택이 구성된 경우는 반복 구성하실 필요 없습니다.
 	> Access Denied 에러가 발생한 경우, AWS CLI가 제대로 설치되지 않았거나 사용중인 AWS 프로파일에 cloudformation:CreateChangeSet 권한이 있는지 확인이 필요합니다.
 
@@ -847,7 +260,7 @@ Network, ECS 를 생성하기 위해 필요한 CDK 패키지를 설치하고, �
 
 	```bash
 	cdk deploy
-    ```
+	```
 
 	명령을 실행하면 다음과 같은 경고 메시지가 표시됩니다.
 	
@@ -887,7 +300,7 @@ Network, ECS 를 생성하기 위해 필요한 CDK 패키지를 설치하고, �
 	Do you wish to deploy these changes (y/n)? 
 	```
 	
-	이 경고 메시지는 앱을 배포하게 되면 발생할 수 있는 위험 요소를 표시합니다. 실습에 필요한 S3에 대한 퍼블릭 접근 권한 허용에 대한 허용입니다. **y**를 입력하여 스택을 배포하고 관련된 자원을 생성합니다.
+	이 경고 메시지는 앱을 배포하게 되면 발생할 수 있는 위험 요소를 표시합니다. 실습에 필요한 S3에 대한 퍼블릭 접근 권한 허용에 대한 허용입니다. **y** 를 입력하여 스택을 배포하고 관련된 자원을 생성합니다.
 	
 	Base 스택 배포가 정상적으로 이루어진 경우 다음과 같은 출력 메시지가 표시됩니다. ACCOUNT-ID는 사용자의 어카운트 ID, REGION은 앱이 생성된 리전, STACK-ID는 스택의 고유 식별자가 표시됩니다.
 
@@ -1030,7 +443,7 @@ Resources 탭을 선택하면, 생성된 리소스의 Physical ID를 확인할 �
 
     > 들여쓰기 및 띄워쓰기 간격이 아래의 텍스트와 동일하도록 입력합니다!
 
-    ```yaml
+	```yaml
 	version: 0.2
 
 	phases:
@@ -1039,7 +452,7 @@ Resources 탭을 선택하면, 생성된 리소스의 Physical ID를 확인할 �
 		  - echo Logging in to Amazon ECR...
 		  - aws --version
 		  - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-		  - REPOSITORY_URI=<YOUR_ACCOUNT_ID>.dkr.ecr.us-west-2.amazonaws.com/aws-cdk/assets 
+		  - REPOSITORY_URI=270867796616.dkr.ecr.us-west-2.amazonaws.com/aws-cdk/assets 
 		  - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
 		  - IMAGE_TAG=${COMMIT_HASH:=latest}
 	  build:
@@ -1058,7 +471,7 @@ Resources 탭을 선택하면, 생성된 리소스의 Physical ID를 확인할 �
 		  - printf '[{"name":"web","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG >     imagedefinitions.json
 	artifacts:
 		files: imagedefinitions.json
-    ```
+	```
 
 6. phases -> pre_build -> commands 의 4번째 라인의 "\<YOUR_ACCOUNT_ID\>" 대신에 본인의 AWS 어카운트 ID를 입력하고 앞에서 생성한 ECR 리포지토리의 주소를 입력합니다. 다음과 같은 형식이 됩니다.
 
@@ -1156,7 +569,7 @@ Resources 탭을 선택하면, 생성된 리소스의 Physical ID를 확인할 �
 
     ![Alt](./images/create-pipeline.png "create pipeline")
 
-2. Add Source Stage에서는 다음과 같이 입력을 하고 Next버튼을 누릅니다.
+2. Add Source Stage에서는 다음과 같이 입력을 하고 Next 버튼을 누릅니다.
 
     - Source provider: **AWS CodeCommit**
 
