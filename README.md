@@ -178,7 +178,7 @@ Network, ECS 를 생성하기 위해 필요한 CDK 패키지를 설치하고, �
 		vpc: ec2.Vpc;
 		cluster: ecs.Cluster;
 	  
-	  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+	  	constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
 		super(scope, id, props);
 
 			// Network
@@ -224,13 +224,13 @@ Network, ECS 를 생성하기 위해 필요한 CDK 패키지를 설치하고, �
 
 스택에서 사용한 코드로 실제 인프라스트럭처를 생성해 보겠습니다. 
 
-	CDK 앱에서 정의한 코드에 대한 CloudFormation 템플릿을 생성하기 위해 **cdk synth** 명령어를 실행합니다.
+	- CDK 앱에서 정의한 코드에 대한 CloudFormation 템플릿을 생성하기 위해 **cdk synth** 명령어를 실행합니다.
 
 	```bash
 	cdk synth
 	```
 	
-	실행 결과로 CloudFormation 템플릿이 출력되고 다음 리소스들이 포함되어 있습니다.
+	- 실행 결과로 CloudFormation 템플릿이 출력되고 다음 리소스들이 포함되어 있습니다.
 
 	- AWS::ElasticLoadBalancingV2
 	- AWS::ECS::TaskDefinition
