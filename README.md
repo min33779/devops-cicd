@@ -584,7 +584,7 @@ Resources 탭을 선택하면, 생성된 리소스의 Physical ID를 확인할 �
     - Build provider: **AWS CodeBuild**
     - Region: **US West - (Oregon)**
     - Project name 오른쪽의 Create a new build project를 선택합니다. 빌드 프로젝트 생성시에는 다음과 같이 입력 및 선택을 하고 나머지는 디폴트로 둡니다
-        - Project Name: devops-hol
+        - Project Name: devopshol
         - Environment Image: **Managed Image**
         - Operating System: **Ubuntu**
         - Runtime: **Standard**
@@ -676,3 +676,11 @@ Resources 탭을 선택하면, 생성된 리소스의 Physical ID를 확인할 �
 4. ECR repositories 삭제
 5. Cloud9 삭제
 6. CloudFormation 삭제
+7. IAM Role 삭제
+	- AWSCodePipelineServiceRole-us-west-2-devopshol
+	- codebuild-devopshol-service-role
+	- cwe-role-us-west-2-devopshol
+8. IAM Policy 삭제
+	- AWSCodePipelineServiceRole-us-west-2-devopshol
+	- CodeBuildBasePolicy-devopshol-us-west-2
+	- start-pipeline-execution-us-west-2-devopshol
