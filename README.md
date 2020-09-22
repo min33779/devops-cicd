@@ -633,7 +633,7 @@ Resources 탭을 선택하면, 생성된 리소스의 Physical ID를 확인할 �
 
 3. 정상적으로 배포되었다면 [https://us-west-2.console.aws.amazon.com/ec2/v2/home?region=us-west-2#LoadBalancers:sort=loadBalancerName](https://us-west-2.console.aws.amazon.com/ec2/v2/home?region=us-west-2#LoadBalancers:sort=loadBalancerName) 에서 CdkEc로 시작하는 LB를 선택한후에 Description 탭의 DNS name을 복사하여 웹 브라우저에 붙여넣고 "DevOps HoL"가 정상적으로 뜨는지 확인합니다. 변경사항이 반영되지 않은 경우 페이지 새로 고침 F5 을 해보시기 바랍니다.
 
-4. 이번에는 구성된 소스 리포지토리에 대한 코드를 변경하고 커밋한 후 변경 사항을 푸시합니다. Cloud9 워크 스페이스에서 왼쪽의 탐색창에서 Dockerfile을 찾아서 더블 클릭하여 편집창을 열고 다음과 같이 수정합니다.
+4. 이번에는 구성된 소스 리포지토리에 대한 코드를 변경하고 커밋한 후 변경 사항을 푸시합니다. Cloud9 워크 스페이스에서 왼쪽의 탐색창에서 Dockerfile을 찾아서 더블 클릭하여 편집창을 열고 다음과 같이 수정합니다. 수정해야 할 Dockerfile 은 ~/environment/devopshol 경로 아래에 있습니다.
 
    - 다음과 같이 수정합니다.
 	```bash
