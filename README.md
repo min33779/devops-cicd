@@ -40,7 +40,7 @@
     [https://us-west-2.console.aws.amazon.com/cloud9/home?region=us-west-2](https://us-west-2.console.aws.amazon.com/cloud9/home?region=us-west-2)
 
 2. Create environment 버튼을 클릭합니다.
-3. Name 에 devopshol 등과 같은 형식으로 입력합니다. 다른 항목은 디폴트로 내버려둡니다.
+3. Name 에 **devopshol** 등과 같은 형식으로 입력합니다. 다른 항목은 디폴트로 내버려둡니다.
 4. 워크스페이스 생성이 되면 welcome 탭을 닫고 새로운 터미널을 열어서 개발 환경을 커스터 마이징 합니다.
 
      ![Alt](./images/cloud9-create-env.png "cloud9 before")
@@ -316,6 +316,9 @@ Network, ECS 를 생성하기 위해 필요한 CDK 패키지를 설치하고, �
 	Stack ARN:
 	arn:aws:cloudformation:us-west-2:270867796616:stack/CdkEcsStack/52a47720-c24a-11ea-8c45-02e40fd26800	
 	```
+	
+	위의 출력 메세지의 Outputs: 에서 **CdkEcsStack.ecsappLoadBalancerDNSxxxxxxxx** 에 해당하는 로드벨런서 URL 을 복사후 웹 브라우저 주소창에 입력하여 접속 해봅니다.
+	화면 연결이 안되는 경우 2~3분 정도 기다렸다 다시 해봅니다. 최초 서비스가 시작되고 Load Balancer에 연결 되기 까지 몇 분 걸릴 수 있습니다.
 	
 ## CloudFormation 콘솔
 
