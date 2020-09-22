@@ -55,7 +55,7 @@
 
 ![Alt](images/overall-architecture.png "overall architecture")
 	
-# CDK 로 인프라 및 ECS 클러스터 생성하기
+# [Lab1] CDK 로 인프라 및 ECS 클러스터 생성하기
 
 > **여기서는 cdk init을 사용해서, 타입스크립트를 사용하는 새로운 AWS CDK 프로젝트를 생성할 것입니다.**
 >
@@ -327,7 +327,8 @@ Resources 탭을 선택하면, 생성된 리소스의 Physical ID를 확인할 �
 
 > ![Alt](./images/cdk-cloudformation-stack-resource.png "cdk cloudformtation resource")
 
-# AWS CodeSeries 로 ECS CICD 파이프라인 만들기
+
+# [Lab2] AWS CodeSeries 로 ECS CICD 파이프라인 만들기
 
 > **여기서는 개발환경(IDE)의 어플리케이션 코드를 AWS CodeCommit 리포지토리와 연결하고 AWS의 CodeSeries 서비스로 ECS CICD 파이프라인을 만드는 방법을 살펴봅니다.**
 >
