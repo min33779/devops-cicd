@@ -592,9 +592,9 @@ Resources 탭을 선택하면, 생성된 리소스의 Physical ID를 확인할 �
         - Environment Image: **Managed Image**
         - Operating System: **Ubuntu**
         - Runtime: **Standard**
-        - Image: **aws/codebuild/standard:1.0**
+        - Image: **aws/codebuild/standard:4.0**
         - **Privileged 옵션 체크**
-        > **Privileged 옵셥을 체크하지 않는다면 Code build에서 도커 이미지를 빌드할 수 없습니다**
+        > **Privileged 옵션을 체크하지 않는다면 Code build에서 도커 이미지를 빌드할 수 없습니다**
         - Continue to CodePipeline 버튼을 누릅니다
     - Add build stage 화면으로 돌아와 Next버튼을 누릅니다
         > 마법사가 빌드 프로젝트에 대해 codebuild-devopshol-service-role과 같은 형식의 CodeBuild 서비스 역할을 생성합니다. 이 역할 이름은 나중에 Amazon ECR 권한을 역할에 추가할 때 필요하므로 메모해 둡니다.
